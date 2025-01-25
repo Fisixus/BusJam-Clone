@@ -139,6 +139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6106557905012713536}
   - component: {fileID: 1007705708930288752}
+  - component: {fileID: 8598875889168992602}
   m_Layer: 0
   m_Name: Beta_Joints
   m_TagString: Untagged
@@ -278,6 +279,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.046238393, y: -0.12454769, z: 0.09047577}
     m_Extent: {x: 0.4617062, y: 0.7530093, z: 0.51351917}
   m_DirtyAABB: 0
+--- !u!114 &8598875889168992602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301808665980388698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &346551744374688645
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +369,8 @@ MonoBehaviour:
   <Animator>k__BackingField: {fileID: 1632250930806257696}
   <JointRenderer>k__BackingField: {fileID: 1007705708930288752}
   <SurfaceRenderer>k__BackingField: {fileID: 5064835931083944808}
+  <JointOutline>k__BackingField: {fileID: 8598875889168992602}
+  <SurfaceOutline>k__BackingField: {fileID: 4640497325402918108}
   <Coordinate>k__BackingField: {x: 0, y: 0}
   <ColorType>k__BackingField: 0
 --- !u!1 &347104775425468302
@@ -2089,6 +2110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 213589826141262130}
   - component: {fileID: 5064835931083944808}
+  - component: {fileID: 4640497325402918108}
   m_Layer: 0
   m_Name: Beta_Surface
   m_TagString: Untagged
@@ -2229,6 +2251,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.04666926, y: -0.0053459406, z: 0.096212715}
     m_Extent: {x: 0.48210692, y: 0.93385816, z: 0.5291312}
   m_DirtyAABB: 0
+--- !u!114 &4640497325402918108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8079627610065181740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8143377156772639781
 GameObject:
   m_ObjectHideFlags: 0

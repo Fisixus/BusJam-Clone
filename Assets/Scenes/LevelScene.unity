@@ -1985,7 +1985,7 @@ MonoBehaviour:
   <ParentTr>k__BackingField: {fileID: 1666331040}
   <ColorData>k__BackingField: {fileID: 11400000, guid: ba2b647ab38dae743ace9374a2eb8596,
     type: 2}
-  <Spacing>k__BackingField: {x: 0.8, y: 1.25}
+  <Spacing>k__BackingField: {x: 0.8, y: 1.4}
 --- !u!1 &1527602382
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,7 +2203,7 @@ MonoBehaviour:
   <ObjPrefab>k__BackingField: {fileID: 2311415893199544757, guid: 57d1692b235a3a6439ba2c4a5f10828f,
     type: 3}
   <ParentTr>k__BackingField: {fileID: 1666331040}
-  <Spacing>k__BackingField: {x: 0.8, y: 1.25}
+  <Spacing>k__BackingField: {x: 0.8, y: 1.4}
 --- !u!1 &1861727896
 GameObject:
   m_ObjectHideFlags: 0
