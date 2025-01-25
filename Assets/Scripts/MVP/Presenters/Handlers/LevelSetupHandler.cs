@@ -26,10 +26,10 @@ namespace MVP.Presenters.Handlers
             List<Dummy> dummies = new List<Dummy>(16);
             List<Grid> grids = new List<Grid>(16);
             
-            //_dummyFactory.DestroyAllDummies();
+            _dummyFactory.DestroyAllDummies();
             _gridFactory.DestroyAllGrids();
             
-            //_dummyFactory.PopulateDummies(dummyColors, dummies);
+            _dummyFactory.PopulateDummies(dummyColors, dummies);
             _gridFactory.PopulateGrids(dummyColors, grids);
         }
     }

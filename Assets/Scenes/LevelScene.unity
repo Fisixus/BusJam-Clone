@@ -1980,8 +1980,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b8a1fa2877a0b4a901134c177acaba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ObjPrefab>k__BackingField: {fileID: 0}
-  <ParentTr>k__BackingField: {fileID: 0}
+  <ObjPrefab>k__BackingField: {fileID: 2286809496872109652, guid: 32c3f4f599b04764b8c8571ae7664396,
+    type: 3}
+  <ParentTr>k__BackingField: {fileID: 1666331040}
+  <ColorData>k__BackingField: {fileID: 11400000, guid: ba2b647ab38dae743ace9374a2eb8596,
+    type: 2}
+  <Spacing>k__BackingField: {x: 0.8, y: 1.25}
 --- !u!1 &1527602382
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,7 +2045,7 @@ Transform:
   m_GameObject: {fileID: 1666331039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

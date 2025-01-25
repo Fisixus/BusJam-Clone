@@ -24,8 +24,6 @@ namespace Core.Factories
             var rows = colorTypes.GetLength(0);
             
             var startX = -((columns - 1) * Spacing.x) / 2;
-            
-            
             // Process the grid with column-to-row traversal
             for (int i = 0; i < columns; i++) // Columns
             {

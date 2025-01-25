@@ -20,7 +20,7 @@ namespace Core.Actors
         
         public override string ToString()
         {
-            return $"Column{Coordinate.x},Row{Coordinate.y}";
+            return $"Grid, Column{Coordinate.x},Row{Coordinate.y}";
         }
     }
 }

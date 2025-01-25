@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using Core.Actors;
 using Core.Factories.Interface;
 using Core.Factories.Pools;
@@ -8,24 +9,36 @@ namespace Core.Factories
 {
     public class DummyFactory : ObjectFactory<Dummy>, IDummyFactory
     {
+        [field: SerializeField]
+        public ColorDataSO ColorData { get; private set; }
+
+        [field:SerializeField]
+        public Vector2 Spacing { get; private set; } = new Vector2(0.8f, 1.25f);
+        
         private List<Dummy> _allDummies = new();
         public override void PreInitialize()
         {
-            //Pool = new ObjectPool<Dummy>(ObjPrefab, ParentTr, 16);
-            //_allDummies = new List<Dummy>(16);
+            Pool = new ObjectPool<Dummy>(ObjPrefab, ParentTr, 16);
+            _allDummies = new List<Dummy>(16);
         }
         
         public void PopulateDummies(ColorType[,] colorTypes, List<Dummy> dummies)
         {
+            var columns = colorTypes.GetLength(1);
+            var rows = colorTypes.GetLength(0);
+            var startX = -((columns - 1) * Spacing.x) / 2;
+
             // Process the grid with column-to-row traversal
-            for (int i = 0; i < colorTypes.GetLength(1); i++) // Columns
+            for (int i = 0; i < columns; i++) // Columns
             {
-                for (int j = 0; j < colorTypes.GetLength(0); j++) // Rows
+                for (int j = 0; j < rows; j++) // Rows
                 {
                     Vector2Int coordinate = new Vector2Int(i, j);
-                    var gridType = colorTypes[j, i];
-
-                    var gridObject = GenerateDummy(gridType, coordinate);
+                    var colorType = colorTypes[j, i];
+                    if(colorType == ColorType.Empty) continue;
+                    
+                    var gridObject = GenerateDummy(colorType, coordinate);
+                    gridObject.SetWorldPosition(startX, Spacing);
                     if (gridObject != null)
                     {
                         dummies.Add(gridObject);
@@ -38,6 +51,7 @@ namespace Core.Factories
         {
             var dummy = CreateObj();
             dummy.SetAttributes(dummyCoordinate, colorType);
+            dummy.SetColor(ColorData);
             return dummy;
         }
 
