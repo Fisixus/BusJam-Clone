@@ -25,9 +25,9 @@ public class UserInput : MonoBehaviour
 
     private void OnDestroy()
     {
-        //_iaUser.Match.Disable();
-        //_iaUser.Match.Touch.performed -= TouchItemNotifier;
-        //OnDummyTouched = null;
+        _iaUser.Level.Disable();
+        _iaUser.Level.Touch.performed -= TouchItemNotifier;
+        OnDummyTouched = null;
     }
 
     public static void SetInputState(bool isInputOn)
