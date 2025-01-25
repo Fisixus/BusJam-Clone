@@ -11,8 +11,8 @@ namespace Core.Factories
         private List<Dummy> _allDummies = new();
         public override void PreInitialize()
         {
-            Pool = new ObjectPool<Dummy>(ObjPrefab, ParentTr, 16);
-            _allDummies = new List<Dummy>(16);
+            //Pool = new ObjectPool<Dummy>(ObjPrefab, ParentTr, 16);
+            //_allDummies = new List<Dummy>(16);
         }
         
         public void PopulateDummies(ColorType[,] colorTypes, List<Dummy> dummies)
@@ -55,7 +55,7 @@ namespace Core.Factories
             _allDummies.Remove(emptyItem);
         }
 
-        public void DestroyAllItems()
+        public void DestroyAllDummies()
         {
             var itemsToDestroy = new List<Dummy>(_allDummies);
             base.DestroyObjs(itemsToDestroy);

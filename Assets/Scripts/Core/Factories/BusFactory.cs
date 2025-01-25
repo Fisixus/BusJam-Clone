@@ -9,7 +9,7 @@ namespace Core.Factories
     {
         public override void PreInitialize()
         {
-            Pool = new ObjectPool<Bus>(ObjPrefab, ParentTr, 4);
+            //Pool = new ObjectPool<Bus>(ObjPrefab, ParentTr, 4);
         }
 
         public void PopulateBuses(ColorType[] colorTypes, List<Bus> buses)

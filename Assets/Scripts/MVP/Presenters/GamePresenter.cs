@@ -1,5 +1,3 @@
-
-using JetBrains.Annotations;
 using UnityEngine.Device;
 
 namespace MVP.Presenters
@@ -9,7 +7,7 @@ namespace MVP.Presenters
         private readonly ScenePresenter _scenePresenter;
         //private readonly SceneTransitionHandler _sceneTransitionHandler;
 
-        public GamePresenter([CanBeNull] ScenePresenter scenePresenter/*, SceneTransitionHandler sceneTransitionHandler*/)
+        public GamePresenter(ScenePresenter scenePresenter/*, SceneTransitionHandler sceneTransitionHandler*/)
         {
             Application.targetFrameRate = 60;
             _scenePresenter = scenePresenter;

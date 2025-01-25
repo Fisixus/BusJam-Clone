@@ -6,5 +6,7 @@ namespace Core.Factories.Interface
     public interface IDummyFactory : IFactory<Dummy>
     {
         public void PopulateDummies(ColorType[,] colorTypes, List<Dummy> dummies);
+        public void DestroyAllDummies();
+
     }
 }

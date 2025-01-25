@@ -13,8 +13,7 @@ namespace Installers.LevelScene
         protected override void InstallBindings()
         {
             Container.BindAsSingle<ILevelUIView>(() => _levelUIView);
-            Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
-            Container.BindAsSingleNonLazy(() => Container.Construct<GamePresenter>());//TODO:
+            //Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
         }
     }
 }

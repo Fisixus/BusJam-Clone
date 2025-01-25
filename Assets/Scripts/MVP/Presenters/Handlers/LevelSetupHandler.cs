@@ -10,9 +10,9 @@ namespace MVP.Presenters.Handlers
     {
         private readonly IDummyFactory _dummyFactory;
         private readonly IGridFactory _gridFactory;
-        private readonly IFactory<Bus> _busFactory;
+        private readonly IBusFactory _busFactory;
 
-        public LevelSetupHandler(IDummyFactory dummyFactory, IGridFactory gridFactory, IFactory<Bus> busFactory)
+        public LevelSetupHandler(IDummyFactory dummyFactory, IGridFactory gridFactory, IBusFactory busFactory)
         {
             _dummyFactory = dummyFactory;
             _gridFactory = gridFactory;
@@ -22,15 +22,14 @@ namespace MVP.Presenters.Handlers
         {
             // Process the grid in a single loop
             var dummyColors = levelInfo.Dummies;
-            var rows = dummyColors.GetLength(0);
-            var cols = dummyColors.GetLength(1);
 
             List<Dummy> dummies = new List<Dummy>(16);
             List<Grid> grids = new List<Grid>(16);
-            List<Bus> buses = new List<Bus>(4);
-            //_dummyFactoryHandler.DestroyAllDummies();
-            //_dummyFactoryHandler.PopulateDummies(dummyColors, dummies);
-            _dummyFactory.PopulateDummies(dummyColors, dummies);
+            
+            //_dummyFactory.DestroyAllDummies();
+            _gridFactory.DestroyAllGrids();
+            
+            //_dummyFactory.PopulateDummies(dummyColors, dummies);
             _gridFactory.PopulateGrids(dummyColors, grids);
         }
     }

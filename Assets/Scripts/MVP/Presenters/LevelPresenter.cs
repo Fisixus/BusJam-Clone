@@ -17,13 +17,14 @@ namespace MVP.Presenters
         private readonly ILevelModel _levelModel;
         private readonly ILevelUIView _levelUIView;
 
-        public LevelPresenter(LevelSetupHandler levelSetupHandler, ILevelUIView levelUIView)
+        public LevelPresenter(LevelSetupHandler levelSetupHandler, ILevelUIView levelUIView, ILevelModel levelModel)
         {
             _levelSetupHandler = levelSetupHandler;
             //_goalHandler = goalHandler;
             _levelUIView = levelUIView;
-            _levelModel = ProjectContext.Container.Resolve<ILevelModel>();
-
+            _levelModel = levelModel;
+            //_levelModel = ProjectContext.Container.Resolve<ILevelModel>();
+            LoadLevel();//TODO:
             //_goalHandler.OnLevelCompleted += HandleLevelCompleted;
             //_goalHandler.OnLevelFailed += HandleLevelFailed;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -54,8 +55,8 @@ namespace MVP.Presenters
 
         public async UniTask LoadLevel()
         {
-            var levelModel = ProjectContext.Container.Resolve<ILevelModel>();
-            var levelInfo = levelModel.LoadLevel();
+            //var levelModel = ProjectContext.Container.Resolve<ILevelModel>();
+            var levelInfo = _levelModel.LoadLevel();
             //_gridView.CalculateGridSize(levelInfo.GridSize);
             _levelSetupHandler.Initialize(levelInfo);
             //_goalHandler.Initialize(levelInfo.Goals, levelInfo.NumberOfMoves);
