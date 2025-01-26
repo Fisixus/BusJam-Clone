@@ -1,7 +1,7 @@
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
-namespace Core
+namespace Core.Actors.Data
 {
     [CreateAssetMenu(fileName = "ColorData_00", menuName = "Data/New ColorData")]
     public class ColorDataSO : ScriptableObject

@@ -14,6 +14,7 @@ namespace Installers.LevelScene
 
         protected override void InstallBindings()
         {
+            Container.BindAsSingle<IBusModel>(() => Container.Construct<BusModel>());
             Container.BindAsSingle<IGridModel>(() => Container.Construct<GridModel>());
             Container.BindAsSingle<ILevelUIView>(() => _levelUIView);
             //Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());

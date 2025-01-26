@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using Core.Actors;
+using Core.Actors.Data;
 using Core.Factories.Interface;
 using Core.Factories.Pools;
 using UnityEngine;

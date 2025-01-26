@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using Core.Actors;
+using Core.Actors.Data;
 using UnityEngine;
 
 namespace Core.Factories.Interface

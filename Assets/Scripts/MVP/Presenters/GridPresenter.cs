@@ -47,10 +47,10 @@ namespace MVP.Presenters
                 
                 // TODO: Move dummy to escape position
                 
-                foreach (var p in path)
-                {
-                    Debug.Log("path:" + p);
-                }
+                // foreach (var p in path)
+                // {
+                //     Debug.Log("path:" + p);
+                // }
                 
                 //touchedDummy.MoveThroughExit(path);
                 

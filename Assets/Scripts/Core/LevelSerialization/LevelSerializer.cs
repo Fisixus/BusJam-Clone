@@ -60,7 +60,7 @@ namespace Core.LevelSerialization
             gridIndex = 0;
             for (int i = 0; i < levelJson.bus_order.Length; ++i)
             {
-                switch (levelJson.grid[gridIndex++])
+                switch (levelJson.bus_order[gridIndex++])
                 {
                     case nameof(JsonGridObjectType.emp):
                         busOrder[i] = ColorType.Empty;

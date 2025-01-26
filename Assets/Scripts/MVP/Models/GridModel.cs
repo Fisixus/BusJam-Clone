@@ -21,7 +21,7 @@ namespace MVP.Models
             {
                 for (int j = 0; j < _rowCount; j++) // Rows
                 {
-                    Grid[i, j] = dummies[i * _rowCount + j];
+                    Grid[i, j] = dummies[i * _rowCount + j]; 
                 }
             }
 
