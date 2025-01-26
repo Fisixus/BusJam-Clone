@@ -57,11 +57,12 @@ namespace MVP.Presenters.Handlers
 
         private bool ExploreComponent(Vector2Int start, HashSet<Vector2Int> visited, List<Vector2Int> component)
         {
+            if (start.y == 0) return true;
             Queue<Vector2Int> queue = new Queue<Vector2Int>();
             queue.Enqueue(start);
             var targetDummy = _grid[start.x, start.y];  // Use (column, row)
             bool canEscape = false;
-
+            
             while (queue.Count > 0)
             {
                 Vector2Int current = queue.Dequeue();

@@ -63,7 +63,7 @@ public class UserInput : MonoBehaviour
     {
         if (IsPointerOverUIObject() || !_isInputOn)
             return;
-        Ray ray = new Ray(_cam.transform.position, _cam.transform.forward);
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 100f) && hit.transform.TryGetComponent<Dummy>(out var dummy))
         {
             OnDummyTouched?.Invoke(dummy);

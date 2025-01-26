@@ -44,8 +44,9 @@ namespace MVP.Presenters.Handlers
             
             _gridModel.Initialize(dummies, cols, rows);
             _gridEscapeHandler.Initialize(_gridModel.Grid);
-            var runnableDummies = _gridPresenter.GetAllRunnableDummies();
-            _gridPresenter.HighlightRunnableDummies(runnableDummies);
+            
+            _gridPresenter.SetAllRunnableDummies();
+            _gridPresenter.HighlightRunnableDummies();
         }
     }
 }

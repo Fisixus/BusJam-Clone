@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Core;
 using Core.Actors;
+using MVP.Models.Interface;
 using MVP.Presenters.Handlers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,10 +11,14 @@ namespace MVP.Presenters
     public class GridPresenter
     {
         private readonly GridEscapeHandler _gridEscapeHandler;
+        private readonly IGridModel _gridModel;
 
-        public GridPresenter(GridEscapeHandler gridEscapeHandler)
+        private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
+
+        public GridPresenter(GridEscapeHandler gridEscapeHandler, IGridModel gridModel)
         {
             _gridEscapeHandler = gridEscapeHandler;
+            _gridModel = gridModel;
             
             UserInput.OnDummyTouched += OnTouch;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -32,12 +38,14 @@ namespace MVP.Presenters
         
         private void OnTouch(Dummy touchedDummy)
         {
-            var escapePaths = GetAllRunnableDummies();
-    
+            Debug.Log("Touched:" + touchedDummy);
+
             // Check if the touched dummy can escape
-            if (escapePaths.TryGetValue(touchedDummy, out var path) && path != null)
+            if (_runnableDummies.TryGetValue(touchedDummy, out var path) && path != null)
             {
-                // TODO: Update grid position to empty
+                // Update grid position to empty
+                var coord = touchedDummy.Coordinate;
+                _gridModel.Grid[coord.x, coord.y].ColorType = ColorType.Empty;
                 // TODO: Move dummy to escape position
                 // TODO: After dummy reaches escape position, move him either through bus or waiting line
             }
@@ -47,18 +55,20 @@ namespace MVP.Presenters
             }
 
             // Highlight runnable dummies after touch interaction
-            HighlightRunnableDummies(escapePaths);
+            SetAllRunnableDummies();
+            HighlightRunnableDummies();
         }
 
-        public Dictionary<Dummy, List<Vector2Int>> GetAllRunnableDummies()
+        public void SetAllRunnableDummies()
         {
-            return _gridEscapeHandler.GetAllEscapePaths();
+            _runnableDummies = _gridEscapeHandler.GetAllEscapePaths();
         }
 
-        public void HighlightRunnableDummies(Dictionary<Dummy, List<Vector2Int>> runnableDummies)
+        public void HighlightRunnableDummies()
         {
-            foreach (var kv in runnableDummies)
+            foreach (var kv in _runnableDummies)
             {
+                Debug.Log(kv.Key);
                 kv.Key.SetOutline(true);
             }
         }
