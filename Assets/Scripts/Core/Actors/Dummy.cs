@@ -23,6 +23,8 @@ namespace Core.Actors
         {
             Coordinate = newCoord;
             ColorType = colorType;
+            SetOutline(false);
+            if(ColorType == ColorType.Empty) this.gameObject.SetActive(false);
             name = ToString();
         }
 

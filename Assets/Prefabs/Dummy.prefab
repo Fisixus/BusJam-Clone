@@ -308,6 +308,7 @@ GameObject:
   - component: {fileID: 2319064743568168161}
   - component: {fileID: 1632250930806257696}
   - component: {fileID: 2286809496872109652}
+  - component: {fileID: 2143642279511458215}
   m_Layer: 0
   m_Name: Dummy
   m_TagString: Untagged
@@ -373,6 +374,29 @@ MonoBehaviour:
   <SurfaceOutline>k__BackingField: {fileID: 4640497325402918108}
   <Coordinate>k__BackingField: {x: 0, y: 0}
   <ColorType>k__BackingField: 0
+--- !u!136 &2143642279511458215
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346551744374688645}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5350629
+  m_Height: 1.7079247
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8032623, z: 0.12434673}
 --- !u!1 &347104775425468302
 GameObject:
   m_ObjectHideFlags: 0

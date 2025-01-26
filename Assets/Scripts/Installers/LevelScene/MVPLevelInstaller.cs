@@ -1,4 +1,6 @@
 using DI;
+using MVP.Models;
+using MVP.Models.Interface;
 using MVP.Presenters;
 using MVP.Views;
 using MVP.Views.Interface;
@@ -12,6 +14,7 @@ namespace Installers.LevelScene
 
         protected override void InstallBindings()
         {
+            Container.BindAsSingle<IGridModel>(() => Container.Construct<GridModel>());
             Container.BindAsSingle<ILevelUIView>(() => _levelUIView);
             //Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
         }
