@@ -36,7 +36,7 @@ namespace Core.Factories
                     Vector2Int coordinate = new Vector2Int(i, j);
                     var colorType = colorTypes[j, i];
                     var gridObject = GenerateDummy(colorType, coordinate);
-                    gridObject.SetWorldPosition(startX, Spacing);
+                    gridObject.SetStartPosition(startX, Spacing);
                     if (gridObject != null)
                     {
                         dummies.Add(gridObject);

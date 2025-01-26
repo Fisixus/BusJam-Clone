@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace Core.Actors
 
         private Sequence _emojiSeq;
         
-        public void SetWorldPosition(float startX, Vector2 spacing)
+        public void SetStartPosition(float startX, Vector2 spacing)
         {
             transform.localPosition = new Vector3(startX + Coordinate.x * spacing.x, transform.localPosition.y,
                 Coordinate.y * -spacing.y);
@@ -51,6 +52,14 @@ namespace Core.Actors
                 .AppendInterval(0.25f)
                 .Append(Emoji.transform.DOLocalMoveY(1, 0.25f))
                 .Join(Emoji.DOFade(0, 0.15f));
+        }
+
+        public void MoveThroughExit(List<Vector3> path)
+        {
+
+
+            DOTween.Sequence()
+                .Append(transform.DOPath(path.ToArray(), 0.5f));
         }
         
         public override string ToString()

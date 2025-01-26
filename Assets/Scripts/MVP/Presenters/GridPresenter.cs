@@ -38,21 +38,30 @@ namespace MVP.Presenters
         
         private void OnTouch(Dummy touchedDummy)
         {
-            Debug.Log("Touched:" + touchedDummy);
-
             // Check if the touched dummy can escape
             if (_runnableDummies.TryGetValue(touchedDummy, out var path) && path != null)
             {
                 // Update grid position to empty
-                var coord = touchedDummy.Coordinate;
-                _gridModel.Grid[coord.x, coord.y].ColorType = ColorType.Empty;
+                //var coord = touchedDummy.Coordinate;
+                //_gridModel.Grid[coord.x, coord.y].ColorType = ColorType.Empty;
+                
                 // TODO: Move dummy to escape position
+                
+                foreach (var p in path)
+                {
+                    Debug.Log("path:" + p);
+                }
+                
+                //touchedDummy.MoveThroughExit(path);
+                
+                
                 // TODO: After dummy reaches escape position, move him either through bus or waiting line
             }
             else
             {
                 // Show angry person emoji
                 touchedDummy.PlayEmojiAnimation();
+                return;
             }
 
             // Highlight runnable dummies after touch interaction
@@ -62,14 +71,13 @@ namespace MVP.Presenters
 
         public void SetAllRunnableDummies()
         {
-            _runnableDummies = _gridEscapeHandler.GetAllEscapePaths();
+            _runnableDummies = _gridEscapeHandler.FindEscapePath();
         }
 
         public void HighlightRunnableDummies()
         {
             foreach (var kv in _runnableDummies)
             {
-                Debug.Log(kv.Key);
                 kv.Key.SetOutline(true);
             }
         }

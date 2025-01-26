@@ -31,7 +31,7 @@ namespace Core.Factories
                 {
                     Vector2Int coordinate = new Vector2Int(i, j);
                     var gridObject = GenerateGrid(coordinate);
-                    gridObject.SetWorldPosition(startX, Spacing);
+                    gridObject.SetStartPosition(startX, Spacing);
                     
                     if (gridObject != null)
                     {
