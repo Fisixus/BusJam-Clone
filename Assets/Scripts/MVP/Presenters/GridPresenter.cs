@@ -51,7 +51,8 @@ namespace MVP.Presenters
             }
             else
             {
-                // TODO: Show angry person emoji
+                // Show angry person emoji
+                touchedDummy.PlayEmojiAnimation();
             }
 
             // Highlight runnable dummies after touch interaction

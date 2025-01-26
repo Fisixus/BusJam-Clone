@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Core.Actors
@@ -8,10 +9,12 @@ namespace Core.Actors
         [field: SerializeField] public Animator Animator { get; private set; }
         [field: SerializeField] public Renderer JointRenderer { get; private set; }
         [field: SerializeField] public Renderer SurfaceRenderer { get; private set; }
-        [field: SerializeField] public Outline JointOutline { get; private set; }
         [field: SerializeField] public Outline SurfaceOutline { get; private set; }
+        [field: SerializeField] public SpriteRenderer Emoji { get; private set; }
         [field: SerializeField] public Vector2Int Coordinate { get; set; }
         [field: SerializeField] public ColorType ColorType { get; set; }
+
+        private Sequence _emojiSeq;
         
         public void SetWorldPosition(float startX, Vector2 spacing)
         {
@@ -36,16 +39,18 @@ namespace Core.Actors
         
         public void SetOutline(bool isOn)
         {
-            if (isOn)
-            {
-                JointOutline.OutlineWidth = 6;
-                SurfaceOutline.OutlineWidth = 6;
-            }
-            else
-            {
-                JointOutline.OutlineWidth = 0;
-                SurfaceOutline.OutlineWidth = 0; 
-            }
+            SurfaceOutline.OutlineWidth = isOn ? 6 : 0;
+        }
+
+        public void PlayEmojiAnimation()
+        {
+            _emojiSeq?.Kill();
+            _emojiSeq = DOTween.Sequence()
+                .Append(Emoji.transform.DOLocalMoveY(2, 0.25f))
+                .Join(Emoji.DOFade(1, 0.25f))
+                .AppendInterval(0.25f)
+                .Append(Emoji.transform.DOLocalMoveY(1, 0.25f))
+                .Join(Emoji.DOFade(0, 0.15f));
         }
         
         public override string ToString()
