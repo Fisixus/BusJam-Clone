@@ -32,23 +32,19 @@ namespace MVP.Presenters.Handlers
 
         public Dictionary<Dummy, List<Vector2Int>> GetAllEscapePaths()
         {
-            HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
             Dictionary<Dummy, List<Vector2Int>> escapePaths = new Dictionary<Dummy, List<Vector2Int>>();
 
-            for (int col = 0; col < _columnCount; col++)  // Iterate by column (x)
+            for (int col = 0; col < _columnCount; col++)
             {
-                for (int row = 0; row < _rowCount; row++)  // Iterate by row (y)
+                for (int row = 0; row < _rowCount; row++)
                 {
                     Vector2Int pos = new Vector2Int(col, row);
-                    if (!visited.Contains(pos) && _grid[col, row].ColorType != ColorType.Empty)
-                    {
-                        List<Vector2Int> path = new List<Vector2Int>();
-                        bool canEscape = ExplorePath(pos, visited, path);
+                    if (_grid[col, row].ColorType == ColorType.Empty) continue;
 
-                        if (canEscape)
-                        {
-                            escapePaths[_grid[col, row]] = new List<Vector2Int>(path);
-                        }
+                    List<Vector2Int> path = new List<Vector2Int>();
+                    if (TryFindEscapePath(pos, path))
+                    {
+                        escapePaths[_grid[col, row]] = new List<Vector2Int>(path);
                     }
                 }
             }
@@ -57,71 +53,75 @@ namespace MVP.Presenters.Handlers
         }
 
         /// <summary>
-        /// Explores the grid using BFS to determine if a dummy can escape.
-        /// If it's already in the first row, it escapes immediately without adding empty cells.
+        /// Attempts to find an escape path for a dummy using BFS.
         /// </summary>
-        private bool ExplorePath(Vector2Int start, HashSet<Vector2Int> visited, List<Vector2Int> path)
+        private bool TryFindEscapePath(Vector2Int start, List<Vector2Int> path)
         {
-            Queue<Vector2Int> queue = new Queue<Vector2Int>();
-            queue.Enqueue(start);
-            var targetDummy = _grid[start.x, start.y];  // Get the dummy in this cell
-            bool canEscape = false;
-
-            // If the dummy is already in the first row, escape immediately
-            if (start.y == 0)
+            if (start.y == 0)  // Dummies in the first row escape immediately
             {
                 path.Add(start);
                 return true;
             }
 
+            Queue<(Vector2Int, List<Vector2Int>)> queue = new Queue<(Vector2Int, List<Vector2Int>)>();
+            queue.Enqueue((start, new List<Vector2Int> { start }));
+            var targetDummy = _grid[start.x, start.y];
+
             while (queue.Count > 0)
             {
-                Vector2Int current = queue.Dequeue();
-                if (visited.Contains(current)) continue;
+                var (current, currentPath) = queue.Dequeue();
 
-                visited.Add(current);
-                path.Add(current);
-
-                foreach (var direction in _directionOffsets)
+                foreach (Vector2Int next in GetValidNeighbors(current, targetDummy))
                 {
-                    Vector2Int next = current + direction.Value;
+                    List<Vector2Int> newPath = new List<Vector2Int>(currentPath) { next };
 
-                    if (!IsWithinBounds(next.x, next.y) || visited.Contains(next))
-                        continue;
+                    if (IsExitPoint(next))
+                    {
+                        path.Clear();
+                        path.AddRange(newPath);
+                        return true;
+                    }
 
-                    // If the next cell is empty, check if it's an escape point
-                    if (_grid[next.x, next.y].ColorType == ColorType.Empty)
-                    {
-                        if (next.y == 0) // If this is an empty exit, finalize path
-                        {
-                            path.Add(next); // Only add the empty exit if needed
-                            return true;
-                        }
-                        else
-                        {
-                            queue.Enqueue(next);
-                            visited.Add(next);
-                        }
-                    }
-                    // If the next cell contains the same dummy type, continue search
-                    else if (_grid[next.x, next.y].Equals(targetDummy))
-                    {
-                        queue.Enqueue(next);
-                    }
+                    queue.Enqueue((next, newPath));
                 }
             }
 
-            return canEscape;
+            return false;
         }
 
+        /// <summary>
+        /// Retrieves valid neighboring cells that the dummy can move to.
+        /// </summary>
+        private IEnumerable<Vector2Int> GetValidNeighbors(Vector2Int current, Dummy targetDummy)
+        {
+            foreach (var direction in _directionOffsets)
+            {
+                Vector2Int next = current + direction.Value;
+                if (!IsWithinBounds(next.x, next.y)) continue;
+
+                if (_grid[next.x, next.y].ColorType == ColorType.Empty || _grid[next.x, next.y].Equals(targetDummy))
+                {
+                    yield return next;
+                }
+            }
+        }
 
         /// <summary>
-        /// Checks if a given position is within grid boundaries.
+        /// Checks if the position is a valid exit (row 0 and empty).
+        /// </summary>
+        private bool IsExitPoint(Vector2Int pos)
+        {
+            return pos.y == 0 && _grid[pos.x, pos.y].ColorType == ColorType.Empty;
+        }
+
+        /// <summary>
+        /// Checks if a given position is within the grid boundaries.
         /// </summary>
         private bool IsWithinBounds(int col, int row)
         {
             return col >= 0 && col < _columnCount && row >= 0 && row < _rowCount;
         }
+
 
     }
 }
