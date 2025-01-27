@@ -3,6 +3,7 @@ using Core.Actors;
 using Core.Factories.Interface;
 using DG.Tweening;
 using MVP.Models.Interface;
+using UnityEngine;
 using UTasks;
 
 namespace MVP.Presenters
@@ -12,12 +13,27 @@ namespace MVP.Presenters
         private readonly IBusModel _busModel;
         private readonly IBusFactory _busFactory;
 
-        
-        
         public BusPresenter(IBusModel busModel, IBusFactory busFactory)
         {
             _busModel = busModel;
             _busFactory = busFactory;
+        }
+
+        public void SitNextChair()
+        {
+            
+        }
+
+        public bool IsBusFull()
+        {
+            var activeBus = _busModel.ActiveBus;
+            foreach (var chair in activeBus.BusChairs)
+            {
+                if (chair.IsAvailable)
+                    return false;
+            }
+
+            return true;
         }
 
         public void MoveBuses()

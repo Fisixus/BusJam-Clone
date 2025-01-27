@@ -33,6 +33,12 @@ namespace Core.Actors
             if(ColorType == ColorType.Empty) this.gameObject.SetActive(false);
             name = ToString();
         }
+        
+        public void ResetAttributes()
+        {
+            Coordinate = -Vector2Int.one;
+            ColorType = ColorType.Empty;
+        }
 
         public void SetColor(ColorDataSO colorData)
         {
@@ -61,5 +67,7 @@ namespace Core.Actors
         {
             return $"Dummy:{ColorType}, Column{Coordinate.x},Row{Coordinate.y}";
         }
+
+
     }
 }

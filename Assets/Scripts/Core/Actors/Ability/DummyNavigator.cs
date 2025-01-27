@@ -35,7 +35,7 @@ namespace Core.Actors.Ability
             }
         }
         
-        public void MoveAlongPath(List<Vector3> path)
+        public void MoveAlongPath(List<Vector3> path, bool isInBus)
         {
             if (path == null || path.Count < 2) return;
             SetAnimationState(DummyAnimations.Running);
@@ -44,10 +44,15 @@ namespace Core.Actors.Ability
             transform.DOKill();
             transform.DOPath(path.ToArray(), duration)
                 .SetLookAt(0.01f) // Makes the character rotate along the path
-                .SetEase(Ease.Linear).OnComplete(() =>
+                .SetEase(Ease.Linear)
+                .OnComplete(() =>
                 {
                     SetAnimationState(DummyAnimations.Idle);
                     ResetRotation();
+                    if (isInBus)
+                    {
+                        gameObject.SetActive(false);
+                    }
                 });
         }
 
