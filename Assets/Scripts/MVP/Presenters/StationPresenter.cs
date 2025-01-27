@@ -61,6 +61,7 @@ namespace MVP.Presenters
             if (CanBoardBus(touchedDummy, out Vector3 busDoorPos))
             {
                 worldPositions.Add(busDoorPos);
+                touchedDummy.SetOutline(false);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
                 tween.OnComplete(() =>
                 {
@@ -106,6 +107,7 @@ namespace MVP.Presenters
             if(activeBus == null)return;//TODO: Could be the winning argument
             foreach (var spot in _stationModel.BusWaitingSpots)
             {
+                if(spot.Dummy is null) continue;//TODO:
                 if (!spot.IsAvailable && spot.Dummy.ColorType == activeBus.ColorType)
                 {
                     var waitingDummy = spot.Dummy;
@@ -148,6 +150,12 @@ namespace MVP.Presenters
         private bool CanBoardBus(Dummy dummy, out Vector3 busDoorPos)
         {
             var activeBus = _busModel.ActiveBus;
+            // If the bus still on move
+            if (DOTween.IsTweening(activeBus.transform))
+            {
+                busDoorPos = -Vector3.one;
+                return false;
+            }
             if (!activeBus.IsBusFull() && activeBus.ColorType == dummy.ColorType)
             {
                 busDoorPos = activeBus.DoorTr.position;
