@@ -68,6 +68,7 @@ namespace MVP.Presenters
                 {
                     worldPositions.Add(waitingSpotPos.Value);
                 }
+                touchedDummy.SetOutline(false);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
                 tween.OnComplete(() =>
                 {

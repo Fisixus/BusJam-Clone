@@ -1,10 +1,6 @@
-using System;
-using Core.Actors;
 using Core.Factories.Interface;
 using DG.Tweening;
 using MVP.Models.Interface;
-using UnityEngine;
-using UTasks;
 
 namespace MVP.Presenters
 {
@@ -72,6 +68,7 @@ namespace MVP.Presenters
                         bus.SetPosition(_busFactory.BusData, newOrder, true);
                         bus.SetColor(_busFactory.ColorData);
                     }
+                    _busModel.BusQueue.Enqueue(bus);
                 }
                 else
                 {
@@ -79,7 +76,6 @@ namespace MVP.Presenters
                     //throw new Exception("Bus count is 0");
                 }
                 
-                _busModel.BusQueue.Enqueue(bus);
             }
         }
         

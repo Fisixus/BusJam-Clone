@@ -34,11 +34,12 @@ namespace Core.Factories
             {
                 _busColors.Enqueue(colorType);
             }
-            
+
+            var order = BusPoolCount - 1;
             for (int i = Mathf.Min(BusPoolCount-1, colorTypes.Length-1); i >= 0; i--)
             {
                 var color = _busColors.Dequeue();
-                var bus = GenerateBus(color, i);
+                var bus = GenerateBus(color, order--);
                 buses.Add(bus);
             }
         }

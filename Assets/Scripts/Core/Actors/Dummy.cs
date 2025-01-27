@@ -48,7 +48,7 @@ namespace Core.Actors
         
         public void SetOutline(bool isOn)
         {
-            SurfaceOutline.OutlineWidth = isOn ? 5 : 0;
+            SurfaceOutline.OutlineWidth = isOn ? 4 : 0;
         }
 
         public void PlayEmojiAnimation()
