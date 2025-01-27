@@ -45,7 +45,6 @@ namespace Core.Actors
         {
             Order = order;
             ColorType = colorType;
-            if(ColorType == ColorType.Empty) this.gameObject.SetActive(false);
             name = ToString();
         }
         

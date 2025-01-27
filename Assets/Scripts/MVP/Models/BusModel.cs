@@ -10,15 +10,8 @@ namespace MVP.Models
         
         private Bus _activeBus;
 
-        public Bus ActiveBus
-        {
-            get
-            {
-                // Returns the front element of the bus queue without removing it
-                return BusQueue.Peek();
-            }
-        }
-        
+        public Bus ActiveBus => BusQueue.Peek();
+
         public void Initialize(List<Bus> buses)
         {
             foreach (var bus in buses)

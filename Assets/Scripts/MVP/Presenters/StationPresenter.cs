@@ -105,7 +105,7 @@ namespace MVP.Presenters
         private bool CanBoardBus(Dummy dummy, out Vector3 busDoorPos)
         {
             var activeBus = _busModel.ActiveBus;
-            if (!_busPresenter.IsBusFull() && activeBus.ColorType == dummy.ColorType)
+            if (!_busPresenter.IsBusFull(_busModel.ActiveBus) && activeBus.ColorType == dummy.ColorType)
             {
                 busDoorPos = activeBus.DoorTr.position;
                 busDoorPos.y = dummy.transform.position.y;
