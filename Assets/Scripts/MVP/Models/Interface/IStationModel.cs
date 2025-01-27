@@ -4,9 +4,9 @@ using Core.Actors;
 
 namespace MVP.Models.Interface
 {
-    public interface IGridModel
+    public interface IStationModel
     {
-        public Queue<BusWaitingSpot> BusWaitingSpots { get; }
+        public BusWaitingSpot[] BusWaitingSpots { get; }
         public Grid[,] Grid { get; } // x:column, y:row
         public Dummy[,] Dummies { get; } // x:column, y:row
         public void InitializeDummies(List<Dummy> dummies, int columns, int rows);

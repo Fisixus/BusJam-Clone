@@ -13,22 +13,22 @@ namespace MVP.Presenters.Handlers
         private readonly IGridFactory _gridFactory;
         private readonly IBusFactory _busFactory;
         private readonly IBusWaitingSpotFactory _waitingSpotFactory;
-        private readonly IGridModel _gridModel;
+        private readonly IStationModel _stationModel;
         private readonly IBusModel _busModel;
         private readonly GridEscapeHandler _gridEscapeHandler;
-        private readonly GridPresenter _gridPresenter;
+        private readonly StationPresenter _stationPresenter;
 
         public LevelSetupHandler(IDummyFactory dummyFactory, IGridFactory gridFactory, IBusFactory busFactory, IBusWaitingSpotFactory waitingSpotFactory,
-            IGridModel gridModel, IBusModel busModel, GridEscapeHandler gridEscapeHandler, GridPresenter gridPresenter)
+            IStationModel stationModel, IBusModel busModel, GridEscapeHandler gridEscapeHandler, StationPresenter stationPresenter)
         {
             _dummyFactory = dummyFactory;
             _gridFactory = gridFactory;
             _busFactory = busFactory;
             _waitingSpotFactory = waitingSpotFactory;
-            _gridModel = gridModel;
+            _stationModel = stationModel;
             _busModel = busModel;
             _gridEscapeHandler = gridEscapeHandler;
-            _gridPresenter = gridPresenter;
+            _stationPresenter = stationPresenter;
         }
         public void Initialize(LevelInfo levelInfo)
         {
@@ -53,14 +53,14 @@ namespace MVP.Presenters.Handlers
             _busFactory.PopulateBuses(busColors, buses);
             _waitingSpotFactory.PopulateSpots(spots);
             
-            _gridModel.InitializeDummies(dummies, cols, rows);
-            _gridModel.InitializeGrids(grids, cols, rows);
-            _gridModel.InitializeBusWaitingSpots(spots);
+            _stationModel.InitializeDummies(dummies, cols, rows);
+            _stationModel.InitializeGrids(grids, cols, rows);
+            _stationModel.InitializeBusWaitingSpots(spots);
             _busModel.Initialize(buses);
-            _gridEscapeHandler.Initialize(_gridModel.Dummies);
+            _gridEscapeHandler.Initialize(_stationModel.Dummies);
             
-            _gridPresenter.SetAllRunnableDummies();
-            _gridPresenter.HighlightRunnableDummies();
+            _stationPresenter.SetAllRunnableDummies();
+            _stationPresenter.HighlightRunnableDummies();
 
         }
     }

@@ -96,4 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5bd59fb9fc948543a1fd4306cfebe16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Order>k__BackingField: 0
   <Dummy>k__BackingField: {fileID: 0}
+  <IsAvailable>k__BackingField: 1
+  <IsLocked>k__BackingField: 0

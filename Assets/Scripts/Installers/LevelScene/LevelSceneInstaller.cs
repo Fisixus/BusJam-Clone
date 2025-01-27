@@ -22,7 +22,7 @@ namespace Installers.LevelScene
             _mvpLevelInstaller.Install(Container);
             
             Container.BindAsSingleNonLazy(() => Container.Construct<BusPresenter>());
-            Container.BindAsSingleNonLazy(() => Container.Construct<GridPresenter>());
+            Container.BindAsSingleNonLazy(() => Container.Construct<StationPresenter>());
             Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
             Container.BindAsSingleNonLazy(() => Container.Construct<GamePresenter>());
             

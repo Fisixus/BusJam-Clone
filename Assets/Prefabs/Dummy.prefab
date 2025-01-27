@@ -289,6 +289,7 @@ GameObject:
   - component: {fileID: 2319064743568168161}
   - component: {fileID: 1632250930806257696}
   - component: {fileID: 2286809496872109652}
+  - component: {fileID: 6455416595882455979}
   - component: {fileID: 2143642279511458215}
   m_Layer: 0
   m_Name: Dummy
@@ -349,13 +350,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6aca70703308844815f553ab6d560a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Animator>k__BackingField: {fileID: 1632250930806257696}
+  <Navigator>k__BackingField: {fileID: 6455416595882455979}
   <JointRenderer>k__BackingField: {fileID: 1007705708930288752}
   <SurfaceRenderer>k__BackingField: {fileID: 5064835931083944808}
   <SurfaceOutline>k__BackingField: {fileID: 4640497325402918108}
   <Emoji>k__BackingField: {fileID: 853146007334052700}
   <Coordinate>k__BackingField: {x: 0, y: 0}
   <ColorType>k__BackingField: 0
+--- !u!114 &6455416595882455979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346551744374688645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe8b63198a2a1043b6d0a88d9904a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Animator>k__BackingField: {fileID: 1632250930806257696}
+  <Speed>k__BackingField: 10
 --- !u!136 &2143642279511458215
 CapsuleCollider:
   m_ObjectHideFlags: 0

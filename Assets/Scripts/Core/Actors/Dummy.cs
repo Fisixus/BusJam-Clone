@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core.Actors.Ability;
 using Core.Actors.Data;
 using DG.Tweening;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Core.Actors
 {
     public class Dummy : MonoBehaviour
     {
-        [field: SerializeField] public Animator Animator { get; private set; }
+        [field: SerializeField] public DummyNavigator Navigator { get; private set; }
         [field: SerializeField] public Renderer JointRenderer { get; private set; }
         [field: SerializeField] public Renderer SurfaceRenderer { get; private set; }
         [field: SerializeField] public Outline SurfaceOutline { get; private set; }
@@ -41,7 +42,7 @@ namespace Core.Actors
         
         public void SetOutline(bool isOn)
         {
-            SurfaceOutline.OutlineWidth = isOn ? 6 : 0;
+            SurfaceOutline.OutlineWidth = isOn ? 5 : 0;
         }
 
         public void PlayEmojiAnimation()
@@ -55,13 +56,6 @@ namespace Core.Actors
                 .Join(Emoji.DOFade(0, 0.15f));
         }
 
-        public void MoveThroughExit(List<Vector3> path)
-        {
-
-
-            DOTween.Sequence()
-                .Append(transform.DOPath(path.ToArray(), 0.5f));
-        }
         
         public override string ToString()
         {

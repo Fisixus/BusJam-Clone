@@ -1,17 +1,15 @@
 using System.Collections.Generic;
-using Core;
 using Core.Actors;
 using MVP.Models.Interface;
-using UnityEngine;
 using Grid = Core.Actors.Grid;
 
 namespace MVP.Models
 {
-    public class GridModel: IGridModel
+    public class StationModel: IStationModel
     {
         public Dummy[,] Dummies { get; private set; } // x:column, y:row
         public Grid[,] Grid { get; private set; } // x:column, y:row
-        public Queue<BusWaitingSpot> BusWaitingSpots{ get; private set; }
+        public BusWaitingSpot[] BusWaitingSpots{ get; private set; }
         
         private int _columnCount;
         private int _rowCount;
@@ -48,10 +46,10 @@ namespace MVP.Models
 
         public void InitializeBusWaitingSpots(List<BusWaitingSpot> spots)
         {
-            BusWaitingSpots = new Queue<BusWaitingSpot>(spots.Count);
-            foreach (var spot in spots)
+            BusWaitingSpots = new BusWaitingSpot[spots.Count];
+            for (int i = 0; i < spots.Count; i++)
             {
-                BusWaitingSpots.Enqueue(spot);
+                BusWaitingSpots[i] = spots[i];
             }
         }
     }

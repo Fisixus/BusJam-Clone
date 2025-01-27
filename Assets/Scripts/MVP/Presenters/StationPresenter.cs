@@ -8,17 +8,17 @@ using UnityEngine.SceneManagement;
 
 namespace MVP.Presenters
 {
-    public class GridPresenter
+    public class StationPresenter
     {
         private readonly GridEscapeHandler _gridEscapeHandler;
-        private readonly IGridModel _gridModel;
+        private readonly IStationModel _stationModel;
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public GridPresenter(GridEscapeHandler gridEscapeHandler, IGridModel gridModel)
+        public StationPresenter(GridEscapeHandler gridEscapeHandler, IStationModel stationModel)
         {
             _gridEscapeHandler = gridEscapeHandler;
-            _gridModel = gridModel;
+            _stationModel = stationModel;
             
             UserInput.OnDummyTouched += OnTouch;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -43,21 +43,32 @@ namespace MVP.Presenters
             {
                 // Update grid position to empty
                 var coord = touchedDummy.Coordinate;
-                _gridModel.Dummies[coord.x, coord.y].ColorType = ColorType.Empty;
+                _stationModel.Dummies[coord.x, coord.y].ColorType = ColorType.Empty;
                 
                 // Transform path coords to world pos
                 List<Vector3> worldPositions = new List<Vector3>();
                 foreach (var p in path)
                 {
-                    Debug.Log("path:" + p);
-                    var worldPos = _gridModel.Grid[p.x, p.y].transform.position;
-                    worldPos.y = _gridModel.Dummies[p.x,p.y].transform.position.y;
+                    //Debug.Log("path:" + p);
+                    var worldPos = _stationModel.Grid[p.x, p.y].transform.position;
+                    worldPos.y = touchedDummy.transform.position.y;
                     worldPositions.Add(worldPos);
                 }
                 
                 // TODO: After dummy reaches escape position, move him either through bus or waiting line
-                //TODO:Worldpositions.add
-                touchedDummy.MoveThroughExit(worldPositions);
+                foreach (var busWaitingSpot in _stationModel.BusWaitingSpots)
+                {
+                    if (busWaitingSpot.IsAvailable)
+                    {
+                        busWaitingSpot.IsAvailable = false;
+                        busWaitingSpot.Dummy = touchedDummy;
+                        var worldPos = busWaitingSpot.transform.position;
+                        worldPos.y = touchedDummy.transform.position.y;
+                        worldPositions.Add(worldPos);
+                        break;
+                    }
+                }                
+                touchedDummy.Navigator.MoveAlongPath(worldPositions);
             }
             else
             {
