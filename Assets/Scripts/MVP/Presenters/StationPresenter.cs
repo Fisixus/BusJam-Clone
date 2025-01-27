@@ -13,7 +13,7 @@ namespace MVP.Presenters
 {
     public class StationPresenter
     {
-        private readonly BusPresenter _busPresenter;
+        private readonly BusSystemHandler _busSystemHandler;
         private readonly GridEscapeHandler _gridEscapeHandler;
         private readonly IStationModel _stationModel;
         private readonly IBusModel _busModel;
@@ -22,14 +22,15 @@ namespace MVP.Presenters
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public StationPresenter(BusPresenter busPresenter, GridEscapeHandler gridEscapeHandler, IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
+        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler, IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
         {
-            _busPresenter = busPresenter;
+            _busSystemHandler = busSystemHandler;
             _gridEscapeHandler = gridEscapeHandler;
             _stationModel = stationModel;
             _busModel = busModel;
             _dummyFactory = dummyFactory;
-            
+
+            _busSystemHandler.OnMoveDummiesFromWaitingSpots += TryMoveDummiesOnStopToBus;
             UserInput.OnDummyTouched += OnTouch;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
@@ -42,6 +43,7 @@ namespace MVP.Presenters
         private void Dispose()
         {
             // Unsubscribe from static and instance events
+            _busSystemHandler.OnMoveDummiesFromWaitingSpots -= TryMoveDummiesOnStopToBus;
             UserInput.OnDummyTouched -= OnTouch;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
@@ -58,20 +60,11 @@ namespace MVP.Presenters
 
             if (CanBoardBus(touchedDummy, out Vector3 busDoorPos))
             {
-                var activeBus = _busModel.ActiveBus;
                 worldPositions.Add(busDoorPos);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
                 tween.OnComplete(() =>
                 {
-                    touchedDummy.gameObject.SetActive(false);
-                    activeBus.SitNextChair(_dummyFactory.ColorData);
-                    if (activeBus.IsBusFull())
-                    {
-                        UTask.Wait(0.3f).Do(() =>
-                        {
-                            _busPresenter.MoveBuses();
-                        });
-                    } 
+                    HandleDummyBoarding(touchedDummy);
                 });
             }
             else
@@ -95,7 +88,42 @@ namespace MVP.Presenters
             HighlightRunnableDummies();
         }
 
+        private void HandleDummyBoarding(Dummy dummy)
+        {
+            var activeBus = _busModel.ActiveBus;
+            dummy.gameObject.SetActive(false);
+            activeBus.SitNextChair(_dummyFactory.ColorData);
+            if (activeBus.IsBusFull())
+            {
+                UTask.Wait(0.6f).Do(() => _busSystemHandler.MoveBuses());
+                //_busSystemHandler.MoveBuses();
+            }
+        }
         
+        private void TryMoveDummiesOnStopToBus()
+        {
+            var activeBus = _busModel.ActiveBus;
+            if(activeBus == null)return;//TODO: Could be the winning argument
+            foreach (var spot in _stationModel.BusWaitingSpots)
+            {
+                if (!spot.IsAvailable && spot.Dummy.ColorType == activeBus.ColorType)
+                {
+                    var waitingDummy = spot.Dummy;
+                    var doorPos = activeBus.DoorTr.position;
+                    doorPos.y = waitingDummy.transform.position.y;
+                    List<Vector3> worldPositions = new List<Vector3> { waitingDummy.transform.position, doorPos };
+                    var tween = waitingDummy.Navigator.MoveAlongPath(worldPositions);
+                    spot.IsAvailable = true;
+                    tween.OnComplete(() =>
+                    {
+                        HandleDummyBoarding(waitingDummy);
+                        spot.Dummy = null;
+                    });
+                    
+                }
+            }
+        }
+
 
         /// <summary>
         /// Converts grid path coordinates to world positions.

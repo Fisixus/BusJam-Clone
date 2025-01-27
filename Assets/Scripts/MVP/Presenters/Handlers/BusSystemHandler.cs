@@ -1,51 +1,27 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Core;
 using Core.Actors;
 using Core.Factories.Interface;
 using DG.Tweening;
 using MVP.Models.Interface;
-using UnityEngine;
 using UTasks;
 
-namespace MVP.Presenters
+namespace MVP.Presenters.Handlers
 {
-    public class BusPresenter
+    public class BusSystemHandler
     {
         private readonly IBusModel _busModel;
-        private readonly IStationModel _stationModel;
         private readonly IBusFactory _busFactory;
-
-        public BusPresenter(IBusModel busModel, IStationModel stationModel, IBusFactory busFactory)
+        
+        public event Action OnMoveDummiesFromWaitingSpots;
+        
+        public BusSystemHandler(IBusModel busModel, IBusFactory busFactory)
         {
             _busModel = busModel;
-            _stationModel = stationModel;
             _busFactory = busFactory;
         }
         
-        private void TryMoveDummiesOnStopToBus()
-        {
-            var activeBus = _busModel.ActiveBus;
-            foreach (var spot in _stationModel.BusWaitingSpots)
-            {
-                if(!spot.IsAvailable)
-                Debug.Log(spot.Dummy.ColorType);
-                if (!spot.IsAvailable && spot.Dummy.ColorType == activeBus.ColorType)//TODO:
-                {
-                    var waitingDummy = spot.Dummy;
-                    var doorPos = activeBus.DoorTr.position;
-                    doorPos.y = waitingDummy.transform.position.y;
-                    List<Vector3> worldPositions = new List<Vector3> { waitingDummy.transform.position, doorPos };
-                    var tween = waitingDummy.Navigator.MoveAlongPath(worldPositions);
-                    spot.IsAvailable = true;
-                    tween.OnComplete(() =>
-                    {
-                        spot.Dummy = null;
-                    });
-                }
-            }
-        }
-
         public void MoveBuses()
         {
             var color = _busFactory.GetNextColor() ?? ColorType.None;
@@ -59,14 +35,16 @@ namespace MVP.Presenters
 
             MoveActiveBus(activeBus, color);
 
+            var animTime = 0.7f;
             for (int i = 0; i < buses.Count - 1; i++)
             {
-                MoveBusToNextPosition(buses[i]);
+                MoveBusToNextPosition(buses[i], animTime);
                 _busModel.BusQueue.Enqueue(buses[i]); // Re-add the bus after processing
             }
-            UTask.Wait(0.6f).Do(()=>
+            UTask.Wait(animTime).Do(()=>
             {
-                TryMoveDummiesOnStopToBus();
+                OnMoveDummiesFromWaitingSpots?.Invoke();
+                //TryMoveDummiesOnStopToBus();
             });
         }
 
@@ -88,16 +66,12 @@ namespace MVP.Presenters
         /// <summary>
         /// Moves a bus to its next position in the queue.
         /// </summary>
-        private void MoveBusToNextPosition(Bus bus)
+        private void MoveBusToNextPosition(Bus bus, float animTime)
         {
             int newOrder = bus.Order + 1;
             bus.SetAttributes(newOrder, bus.ColorType);
-            var animTime = 0.5f;
             bus.SetPosition(_busFactory.BusData, newOrder, true, animTime);
             
         }
-
-
-        
     }
 }

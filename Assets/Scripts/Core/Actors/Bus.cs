@@ -14,15 +14,14 @@ namespace Core.Actors
         [field: SerializeField] public List<BusChair> BusChairs { get; set; }
         [field: SerializeField] public Transform DoorTr { get; set; }
         
-        public Tween SetPosition(float newLocalX)
+        public Tween SetPosition(float newLocalX, float animTime = 0.7f)
         {
             transform.DOKill();
-            float animTime = 0.5f;
             var tween = transform.DOLocalMoveX(newLocalX, animTime).SetEase(Ease.InQuad);
             return tween;
         }
         
-        public void SetPosition(BusDataSO busData, int order, bool isAnimOn=false, float animTime = 0.5f)
+        public void SetPosition(BusDataSO busData, int order, bool isAnimOn=false, float animTime = 0.7f)
         {
             transform.DOKill();
             Order = order;
@@ -67,9 +66,6 @@ namespace Core.Actors
         
         public void SitNextChair(ColorDataSO colorData)
         {
-            //var activeBus = _busModel.ActiveBus;
-            //var color = activeBus.ColorType;
-
             BusChair nextChair = GetNextAvailableChair();
             if (nextChair != null)
             {

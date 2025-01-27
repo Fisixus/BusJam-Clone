@@ -10,8 +10,16 @@ namespace MVP.Models
         
         private Bus _activeBus;
 
-        public Bus ActiveBus => BusQueue.Peek();
-
+        public Bus ActiveBus
+        {
+            get
+            {
+                if(BusQueue.Count > 0)
+                    return BusQueue.Peek();
+                return null;
+            }
+        }
+        
         public void Initialize(List<Bus> buses)
         {
             foreach (var bus in buses)

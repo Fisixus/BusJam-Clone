@@ -9,6 +9,7 @@ namespace Installers.LevelScene
         {
             Container.BindAsSingle(() => Container.Construct<LevelSetupHandler>());
             Container.BindAsSingle(() => Container.Construct<GridEscapeHandler>());
+            Container.BindAsSingle(() => Container.Construct<BusSystemHandler>());
         }
     }
 }

@@ -21,7 +21,6 @@ namespace Installers.LevelScene
             _factoryInstaller.Install(Container);
             _mvpLevelInstaller.Install(Container);
             
-            Container.BindAsSingleNonLazy(() => Container.Construct<BusPresenter>());
             Container.BindAsSingleNonLazy(() => Container.Construct<StationPresenter>());
             Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
             Container.BindAsSingleNonLazy(() => Container.Construct<GamePresenter>());
