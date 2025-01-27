@@ -12,16 +12,28 @@ namespace MVP.Presenters
     {
         private readonly IBusModel _busModel;
         private readonly IBusFactory _busFactory;
+        private readonly IDummyFactory _dummyFactory;
 
-        public BusPresenter(IBusModel busModel, IBusFactory busFactory)
+        public BusPresenter(IBusModel busModel, IBusFactory busFactory, IDummyFactory dummyFactory)
         {
             _busModel = busModel;
             _busFactory = busFactory;
+            _dummyFactory = dummyFactory;
         }
 
         public void SitNextChair()
         {
-            
+            var chairs = _busModel.ActiveBus.BusChairs;
+            var color = _busModel.ActiveBus.ColorType;
+            foreach (var chair in chairs)
+            {
+                if (chair.IsAvailable)
+                {
+                    chair.IsAvailable = false;
+                    chair.SetChairOwner(color, _dummyFactory.ColorData);
+                    break;
+                }
+            }
         }
 
         public bool IsBusFull()

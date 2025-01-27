@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Core;
 using Core.Actors;
+using DG.Tweening;
 using MVP.Models.Interface;
 using MVP.Presenters.Handlers;
 using UnityEngine;
@@ -53,7 +54,12 @@ namespace MVP.Presenters
             if (CanBoardBus(touchedDummy, out Vector3 busDoorPos))
             {
                 worldPositions.Add(busDoorPos);
-                touchedDummy.Navigator.MoveAlongPath(worldPositions, true);
+                var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
+                tween.OnComplete(() =>
+                {
+                    _busPresenter.SitNextChair();
+                    touchedDummy.gameObject.SetActive(false);
+                });
             }
             else
             {
@@ -62,7 +68,12 @@ namespace MVP.Presenters
                 {
                     worldPositions.Add(waitingSpotPos.Value);
                 }
-                touchedDummy.Navigator.MoveAlongPath(worldPositions, false);
+                var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
+                tween.OnComplete(() =>
+                {
+                    touchedDummy.Navigator.SetAnimationState(DummyAnimations.Idle);
+                    touchedDummy.Navigator.ResetRotation();
+                });
             }
 
             ClearGridPosition(touchedDummy);
@@ -132,9 +143,6 @@ namespace MVP.Presenters
             var coord = dummy.Coordinate;
             _stationModel.Dummies[coord.x, coord.y].ResetAttributes();
         }
-
-
-
 
         public void SetAllRunnableDummies()
         {

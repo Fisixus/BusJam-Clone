@@ -35,25 +35,17 @@ namespace Core.Actors.Ability
             }
         }
         
-        public void MoveAlongPath(List<Vector3> path, bool isInBus)
+        public Tween MoveAlongPath(List<Vector3> path)
         {
-            if (path == null || path.Count < 2) return;
+            if (path == null || path.Count < 2) return null;
             SetAnimationState(DummyAnimations.Running);
             float totalDistance = CalculateTotalDistance(path);
             float duration = totalDistance / Speed; // Time = Distance / Speed
             transform.DOKill();
-            transform.DOPath(path.ToArray(), duration)
+            var tweenerCore = transform.DOPath(path.ToArray(), duration)
                 .SetLookAt(0.01f) // Makes the character rotate along the path
-                .SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    SetAnimationState(DummyAnimations.Idle);
-                    ResetRotation();
-                    if (isInBus)
-                    {
-                        gameObject.SetActive(false);
-                    }
-                });
+                .SetEase(Ease.Linear);
+            return tweenerCore;
         }
 
         private float CalculateTotalDistance(List<Vector3> path)
@@ -66,7 +58,7 @@ namespace Core.Actors.Ability
             return distance;
         }
 
-        private void ResetRotation()
+        public void ResetRotation()
         {
             transform.DORotateQuaternion(_originalRotation, 0.2f)
                 .SetEase(Ease.OutQuad); // Smoothly return to original rotation

@@ -15,14 +15,14 @@ namespace Core.Actors
             IsAvailable = true;
         }
         
-        public void SetChairOwner(Dummy dummy, ColorDataSO colorData)
+        public void SetChairOwner(ColorType colorType, ColorDataSO colorData)
         {
-            ChairOwner.ColorType = dummy.ColorType;
-            ChairOwner.SetColor(colorData);//TODO:
-            PlacingPS.Play();
-            ChairOwner.Navigator.SetAnimationState(DummyAnimations.Sitting);
             ChairOwner.gameObject.SetActive(true);
             IsAvailable = false;
+            ChairOwner.ColorType = colorType;
+            ChairOwner.SetColor(colorData);
+            PlacingPS.Play();
+            ChairOwner.Navigator.SetAnimationState(DummyAnimations.Sitting);
         }
     }
 }
