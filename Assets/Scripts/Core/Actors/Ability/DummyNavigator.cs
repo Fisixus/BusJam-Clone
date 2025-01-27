@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -8,7 +9,6 @@ namespace Core.Actors.Ability
     {
         [field: SerializeField] public Animator Animator { get; private set; }
         [field: SerializeField] public float Speed { get; private set; } = 2f;  // Speed in units per second
-        private static readonly int SpeedAnim = Animator.StringToHash("Speed");
         
         private Quaternion _originalRotation; // Store original rotation
 
@@ -16,10 +16,29 @@ namespace Core.Actors.Ability
         {
             _originalRotation = transform.rotation; // Save initial rotation
         }
+
+        public void SetAnimationState(DummyAnimations animState)
+        {
+            switch (animState)
+            {
+                case DummyAnimations.Idle:
+                    Animator.SetTrigger(DummyAnimations.Idle.ToString());
+                    break;
+                case DummyAnimations.Sitting:
+                    Animator.SetTrigger(DummyAnimations.Sitting.ToString());
+                    break;
+                case DummyAnimations.Running:
+                    Animator.SetTrigger(DummyAnimations.Running.ToString());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(animState), animState, null);
+            }
+        }
+        
         public void MoveAlongPath(List<Vector3> path)
         {
             if (path == null || path.Count < 2) return;
-            Animator.SetFloat(SpeedAnim, Speed);
+            SetAnimationState(DummyAnimations.Running);
             float totalDistance = CalculateTotalDistance(path);
             float duration = totalDistance / Speed; // Time = Distance / Speed
             transform.DOKill();
@@ -27,7 +46,7 @@ namespace Core.Actors.Ability
                 .SetLookAt(0.01f) // Makes the character rotate along the path
                 .SetEase(Ease.Linear).OnComplete(() =>
                 {
-                    Animator.SetFloat(SpeedAnim, 0);
+                    SetAnimationState(DummyAnimations.Idle);
                     ResetRotation();
                 });
         }

@@ -10,7 +10,7 @@ namespace Core.Actors
         [field: SerializeField] public int Order { get; private set; }
         [field: SerializeField] public List<Renderer> BusRenderers { get; private set; }
         [field: SerializeField] public ColorType ColorType { get; set; }
-        [field: SerializeField] public List<GameObject> ChairObjs { get; set; }
+        [field: SerializeField] public List<BusChair> BusChairs { get; set; }
         [field: SerializeField] public Transform DoorTr { get; set; }
         
         public Tween SetPosition(float newLocalX)

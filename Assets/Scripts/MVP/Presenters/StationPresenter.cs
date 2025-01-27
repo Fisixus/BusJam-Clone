@@ -12,13 +12,15 @@ namespace MVP.Presenters
     {
         private readonly GridEscapeHandler _gridEscapeHandler;
         private readonly IStationModel _stationModel;
+        private readonly IBusModel _busModel;
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public StationPresenter(GridEscapeHandler gridEscapeHandler, IStationModel stationModel)
+        public StationPresenter(GridEscapeHandler gridEscapeHandler, IStationModel stationModel, IBusModel busModel)
         {
             _gridEscapeHandler = gridEscapeHandler;
             _stationModel = stationModel;
+            _busModel = busModel;
             
             UserInput.OnDummyTouched += OnTouch;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -56,6 +58,8 @@ namespace MVP.Presenters
                 }
                 
                 // TODO: After dummy reaches escape position, move him either through bus or waiting line
+                var activeBus = _busModel.ActiveBus;
+                
                 foreach (var busWaitingSpot in _stationModel.BusWaitingSpots)
                 {
                     if (busWaitingSpot.IsAvailable)
