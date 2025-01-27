@@ -6,54 +6,44 @@ using Core.Factories.Interface;
 using DG.Tweening;
 using MVP.Models.Interface;
 using UnityEngine;
+using UTasks;
 
 namespace MVP.Presenters
 {
     public class BusPresenter
     {
         private readonly IBusModel _busModel;
+        private readonly IStationModel _stationModel;
         private readonly IBusFactory _busFactory;
-        private readonly IDummyFactory _dummyFactory;
 
-        public BusPresenter(IBusModel busModel, IBusFactory busFactory, IDummyFactory dummyFactory)
+        public BusPresenter(IBusModel busModel, IStationModel stationModel, IBusFactory busFactory)
         {
             _busModel = busModel;
+            _stationModel = stationModel;
             _busFactory = busFactory;
-            _dummyFactory = dummyFactory;
-        }
-
-        public void SitNextChair()
-        {
-            var activeBus = _busModel.ActiveBus;
-            var color = activeBus.ColorType;
-
-            BusChair nextChair = GetNextAvailableChair(activeBus);
-            if (nextChair != null)
-            {
-                nextChair.IsAvailable = false;
-                nextChair.SetChairOwner(color, _dummyFactory.ColorData);
-            }
-
-            if (IsBusFull(activeBus))
-            {
-                MoveBuses();
-            }
         }
         
-        /// <summary>
-        /// Checks if the given bus is full.
-        /// </summary>
-        public bool IsBusFull(Bus bus)
+        private void TryMoveDummiesOnStopToBus()
         {
-            return bus.BusChairs.All(chair => !chair.IsAvailable);
-        }
-
-        /// <summary>
-        /// Finds the next available chair in the active bus.
-        /// </summary>
-        private BusChair GetNextAvailableChair(Bus bus)
-        {
-            return bus.BusChairs.FirstOrDefault(chair => chair.IsAvailable);
+            var activeBus = _busModel.ActiveBus;
+            foreach (var spot in _stationModel.BusWaitingSpots)
+            {
+                if(!spot.IsAvailable)
+                Debug.Log(spot.Dummy.ColorType);
+                if (!spot.IsAvailable && spot.Dummy.ColorType == activeBus.ColorType)//TODO:
+                {
+                    var waitingDummy = spot.Dummy;
+                    var doorPos = activeBus.DoorTr.position;
+                    doorPos.y = waitingDummy.transform.position.y;
+                    List<Vector3> worldPositions = new List<Vector3> { waitingDummy.transform.position, doorPos };
+                    var tween = waitingDummy.Navigator.MoveAlongPath(worldPositions);
+                    spot.IsAvailable = true;
+                    tween.OnComplete(() =>
+                    {
+                        spot.Dummy = null;
+                    });
+                }
+            }
         }
 
         public void MoveBuses()
@@ -74,6 +64,10 @@ namespace MVP.Presenters
                 MoveBusToNextPosition(buses[i]);
                 _busModel.BusQueue.Enqueue(buses[i]); // Re-add the bus after processing
             }
+            UTask.Wait(0.6f).Do(()=>
+            {
+                TryMoveDummiesOnStopToBus();
+            });
         }
 
         /// <summary>
@@ -97,8 +91,10 @@ namespace MVP.Presenters
         private void MoveBusToNextPosition(Bus bus)
         {
             int newOrder = bus.Order + 1;
-            bus.SetPosition(_busFactory.BusData, newOrder, true);
             bus.SetAttributes(newOrder, bus.ColorType);
+            var animTime = 0.5f;
+            bus.SetPosition(_busFactory.BusData, newOrder, true, animTime);
+            
         }
 
 

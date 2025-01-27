@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Core;
 using Core.Actors;
+using Core.Factories.Interface;
 using DG.Tweening;
 using MVP.Models.Interface;
 using MVP.Presenters.Handlers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UTasks;
 
 namespace MVP.Presenters
 {
@@ -15,15 +17,18 @@ namespace MVP.Presenters
         private readonly GridEscapeHandler _gridEscapeHandler;
         private readonly IStationModel _stationModel;
         private readonly IBusModel _busModel;
+        private readonly IDummyFactory _dummyFactory;
+
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public StationPresenter(BusPresenter busPresenter, GridEscapeHandler gridEscapeHandler, IStationModel stationModel, IBusModel busModel)
+        public StationPresenter(BusPresenter busPresenter, GridEscapeHandler gridEscapeHandler, IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
         {
             _busPresenter = busPresenter;
             _gridEscapeHandler = gridEscapeHandler;
             _stationModel = stationModel;
             _busModel = busModel;
+            _dummyFactory = dummyFactory;
             
             UserInput.OnDummyTouched += OnTouch;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -53,12 +58,20 @@ namespace MVP.Presenters
 
             if (CanBoardBus(touchedDummy, out Vector3 busDoorPos))
             {
+                var activeBus = _busModel.ActiveBus;
                 worldPositions.Add(busDoorPos);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
                 tween.OnComplete(() =>
                 {
-                    _busPresenter.SitNextChair();
                     touchedDummy.gameObject.SetActive(false);
+                    activeBus.SitNextChair(_dummyFactory.ColorData);
+                    if (activeBus.IsBusFull())
+                    {
+                        UTask.Wait(0.3f).Do(() =>
+                        {
+                            _busPresenter.MoveBuses();
+                        });
+                    } 
                 });
             }
             else
@@ -81,6 +94,8 @@ namespace MVP.Presenters
             SetAllRunnableDummies();
             HighlightRunnableDummies();
         }
+
+        
 
         /// <summary>
         /// Converts grid path coordinates to world positions.
@@ -105,7 +120,7 @@ namespace MVP.Presenters
         private bool CanBoardBus(Dummy dummy, out Vector3 busDoorPos)
         {
             var activeBus = _busModel.ActiveBus;
-            if (!_busPresenter.IsBusFull(_busModel.ActiveBus) && activeBus.ColorType == dummy.ColorType)
+            if (!activeBus.IsBusFull() && activeBus.ColorType == dummy.ColorType)
             {
                 busDoorPos = activeBus.DoorTr.position;
                 busDoorPos.y = dummy.transform.position.y;
@@ -127,6 +142,7 @@ namespace MVP.Presenters
 
                 busWaitingSpot.IsAvailable = false;
                 busWaitingSpot.Dummy = dummy;
+                Debug.Log(busWaitingSpot.Dummy.ColorType);
                 
                 Vector3 worldPos = busWaitingSpot.transform.position;
                 worldPos.y = dummy.transform.position.y;

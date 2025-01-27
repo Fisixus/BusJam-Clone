@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Core.Actors.Data;
 using DG.Tweening;
 using UnityEngine;
@@ -21,13 +22,13 @@ namespace Core.Actors
             return tween;
         }
         
-        public void SetPosition(BusDataSO busData, int order, bool isAnimOn=false)
+        public void SetPosition(BusDataSO busData, int order, bool isAnimOn=false, float animTime = 0.5f)
         {
             transform.DOKill();
             Order = order;
             if (isAnimOn)
             {
-                transform.DOLocalMoveX(busData.OrderXPositions[order], 0.5f).SetEase(Ease.InQuad);
+                transform.DOLocalMoveX(busData.OrderXPositions[order], animTime).SetEase(Ease.InQuad);
             }
             else
             {
@@ -46,6 +47,35 @@ namespace Core.Actors
             Order = order;
             ColorType = colorType;
             name = ToString();
+        }
+        
+        /// <summary>
+        /// Checks if the given bus is full.
+        /// </summary>
+        public bool IsBusFull()
+        {
+            return BusChairs.All(chair => !chair.IsAvailable);
+        }
+
+        /// <summary>
+        /// Finds the next available chair in the active bus.
+        /// </summary>
+        public BusChair GetNextAvailableChair()
+        {
+            return BusChairs.FirstOrDefault(chair => chair.IsAvailable);
+        }
+        
+        public void SitNextChair(ColorDataSO colorData)
+        {
+            //var activeBus = _busModel.ActiveBus;
+            //var color = activeBus.ColorType;
+
+            BusChair nextChair = GetNextAvailableChair();
+            if (nextChair != null)
+            {
+                nextChair.IsAvailable = false;
+                nextChair.SetChairOwner(ColorType,colorData);
+            }
         }
         
         public override string ToString()
