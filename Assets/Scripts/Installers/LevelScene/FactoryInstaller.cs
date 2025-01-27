@@ -13,12 +13,14 @@ namespace Installers.LevelScene
         [SerializeField] private DummyFactory _dummyFactory;
         [SerializeField] private GridFactory _gridFactory;
         [SerializeField] private BusFactory _busFactory;
+        [SerializeField] private BusWaitingSpotFactory _waitingSpotFactory;
 
         protected override void InstallBindings()
         {
             Container.BindAsSingle<IDummyFactory>(() => _dummyFactory);
             Container.BindAsSingle<IGridFactory>(() => _gridFactory);
             Container.BindAsSingle<IBusFactory>(() => _busFactory);
+            Container.BindAsSingle<IBusWaitingSpotFactory>(() => _waitingSpotFactory);
         }
     }
 }

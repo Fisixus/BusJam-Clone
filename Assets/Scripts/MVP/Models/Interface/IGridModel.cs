@@ -6,7 +6,11 @@ namespace MVP.Models.Interface
 {
     public interface IGridModel
     {
-        public Dummy[,] Grid { get; } // x:column, y:row
-        public void Initialize(List<Dummy> dummies, int columns, int rows);
+        public Queue<BusWaitingSpot> BusWaitingSpots { get; }
+        public Grid[,] Grid { get; } // x:column, y:row
+        public Dummy[,] Dummies { get; } // x:column, y:row
+        public void InitializeDummies(List<Dummy> dummies, int columns, int rows);
+        public void InitializeGrids(List<Grid> grids, int columns, int rows);
+        public void InitializeBusWaitingSpots(List<BusWaitingSpot> spots);
     }
 }

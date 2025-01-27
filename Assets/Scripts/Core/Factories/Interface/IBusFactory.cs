@@ -13,4 +13,5 @@ namespace Core.Factories.Interface
         public ColorType? GetNextColor();
         public void DestroyAllBuses();
     }
+    
 }

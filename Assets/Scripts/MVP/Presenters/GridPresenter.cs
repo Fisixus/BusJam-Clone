@@ -42,20 +42,22 @@ namespace MVP.Presenters
             if (_runnableDummies.TryGetValue(touchedDummy, out var path) && path != null)
             {
                 // Update grid position to empty
-                //var coord = touchedDummy.Coordinate;
-                //_gridModel.Grid[coord.x, coord.y].ColorType = ColorType.Empty;
+                var coord = touchedDummy.Coordinate;
+                _gridModel.Dummies[coord.x, coord.y].ColorType = ColorType.Empty;
                 
-                // TODO: Move dummy to escape position
-                
+                // Transform path coords to world pos
+                List<Vector3> worldPositions = new List<Vector3>();
                 foreach (var p in path)
                 {
                     Debug.Log("path:" + p);
+                    var worldPos = _gridModel.Grid[p.x, p.y].transform.position;
+                    worldPos.y = _gridModel.Dummies[p.x,p.y].transform.position.y;
+                    worldPositions.Add(worldPos);
                 }
                 
-                //touchedDummy.MoveThroughExit(path);
-                
-                
                 // TODO: After dummy reaches escape position, move him either through bus or waiting line
+                //TODO:Worldpositions.add
+                touchedDummy.MoveThroughExit(worldPositions);
             }
             else
             {
