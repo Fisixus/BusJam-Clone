@@ -36,7 +36,7 @@ namespace Core.LevelSerialization
                 switch (levelJson.grid[gridIndex++])
                 {
                     case nameof(JsonGridObjectType.emp):
-                        dummies[i, j] = ColorType.Empty;
+                        dummies[i, j] = ColorType.None;
                         break;
                     case nameof(JsonGridObjectType.r):
                         dummies[i, j] = ColorType.Red;
@@ -51,7 +51,7 @@ namespace Core.LevelSerialization
                         dummies[i, j] = ColorType.Yellow;
                         break;
                     default:
-                        dummies[i, j] = ColorType.Empty;
+                        dummies[i, j] = ColorType.None;
                         break;
                 }
             }
@@ -63,7 +63,7 @@ namespace Core.LevelSerialization
                 switch (levelJson.bus_order[gridIndex++])
                 {
                     case nameof(JsonGridObjectType.emp):
-                        busOrder[i] = ColorType.Empty;
+                        busOrder[i] = ColorType.None;
                         //TODO: Throw exception
                         break;
                     case nameof(JsonGridObjectType.r):
@@ -79,7 +79,7 @@ namespace Core.LevelSerialization
                         busOrder[i] = ColorType.Yellow;
                         break;
                     default:
-                        busOrder[i] = ColorType.Empty;
+                        busOrder[i] = ColorType.None;
                         //TODO: Throw exception
                         break;
                 }

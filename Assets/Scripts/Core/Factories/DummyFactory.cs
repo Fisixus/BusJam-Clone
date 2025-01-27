@@ -64,7 +64,7 @@ namespace Core.Factories
         public override void DestroyObj(Dummy emptyItem)
         {
             base.DestroyObj(emptyItem);
-            emptyItem.SetAttributes(-Vector2Int.one, ColorType.Empty);
+            emptyItem.SetAttributes(-Vector2Int.one, ColorType.None);
             _allDummies.Remove(emptyItem);
         }
 

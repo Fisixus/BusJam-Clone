@@ -69,7 +69,7 @@ namespace Core.Factories
         public override void DestroyObj(Bus emptyBus)
         {
             base.DestroyObj(emptyBus);
-            emptyBus.SetAttributes(-1, ColorType.Empty);
+            emptyBus.SetAttributes(-1, ColorType.None);
             _allBuses.Remove(emptyBus);
         }
 

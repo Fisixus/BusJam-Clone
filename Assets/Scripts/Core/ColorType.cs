@@ -2,7 +2,7 @@ namespace Core
 {
     public enum ColorType
     {
-        Empty,
+        None,
         Red,
         Green,
         Blue,

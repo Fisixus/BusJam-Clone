@@ -17,6 +17,8 @@ namespace Core.Actors
         [field: SerializeField] public Vector2Int Coordinate { get; set; }
         [field: SerializeField] public ColorType ColorType { get; set; }
 
+        [field: SerializeField] public bool IsLeft { get; set; }
+
         private Sequence _emojiSeq;
         
         public void SetStartPosition(float startX, Vector2 spacing)
@@ -30,14 +32,18 @@ namespace Core.Actors
             Coordinate = newCoord;
             ColorType = colorType;
             SetOutline(false);
-            if(ColorType == ColorType.Empty) this.gameObject.SetActive(false);
+            if (IsLeft || ColorType == ColorType.None)
+            {
+                IsLeft = true;
+                this.gameObject.SetActive(false);
+            }
             name = ToString();
         }
         
         public void ResetAttributes()
         {
             Coordinate = -Vector2Int.one;
-            ColorType = ColorType.Empty;
+            IsLeft = true;
         }
 
         public void SetColor(ColorDataSO colorData)

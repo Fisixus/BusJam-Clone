@@ -142,7 +142,6 @@ namespace MVP.Presenters
 
                 busWaitingSpot.IsAvailable = false;
                 busWaitingSpot.Dummy = dummy;
-                Debug.Log(busWaitingSpot.Dummy.ColorType);
                 
                 Vector3 worldPos = busWaitingSpot.transform.position;
                 worldPos.y = dummy.transform.position.y;

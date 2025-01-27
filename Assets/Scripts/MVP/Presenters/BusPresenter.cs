@@ -48,7 +48,7 @@ namespace MVP.Presenters
 
         public void MoveBuses()
         {
-            var color = _busFactory.GetNextColor() ?? ColorType.Empty;
+            var color = _busFactory.GetNextColor() ?? ColorType.None;
 
             // Get the active bus (front of the queue)
             var activeBus = _busModel.BusQueue.Dequeue();
