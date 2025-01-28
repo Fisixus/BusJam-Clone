@@ -17,7 +17,8 @@ namespace Installers.LevelScene
             Container.BindAsSingle<IBusModel>(() => Container.Construct<BusModel>());
             Container.BindAsSingle<IStationModel>(() => Container.Construct<StationModel>());
             Container.BindAsSingle<ILevelUIView>(() => _levelUIView);
-            //Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
+            Container.BindAsSingleNonLazy(() => Container.Construct<StationPresenter>());
+            Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
         }
     }
 }

@@ -41,7 +41,6 @@ namespace MVP.Presenters.Handlers
             }
             
             _busModel.BusQueue.Enqueue(activeBus); // Put it back in the queue
-            Debug.Log(_busModel.BusQueue.Count);
 
             UTask.Wait(animTime).Do(()=>
             {

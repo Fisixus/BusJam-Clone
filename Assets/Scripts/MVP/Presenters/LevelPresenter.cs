@@ -14,20 +14,17 @@ namespace MVP.Presenters
     {
         private readonly LevelSetupHandler _levelSetupHandler;
         private readonly GoalHandler _goalHandler;
-        //private readonly IGridView _gridView;
         private readonly ILevelModel _levelModel;
         private readonly ILevelUIView _levelUIView;
 
-        public LevelPresenter(LevelSetupHandler levelSetupHandler, GoalHandler goalHandler, ILevelUIView levelUIView, ILevelModel levelModel)
+        public LevelPresenter(LevelSetupHandler levelSetupHandler, GoalHandler goalHandler, ILevelUIView levelUIView)
         {
             _levelSetupHandler = levelSetupHandler;
             _goalHandler = goalHandler;
             _levelUIView = levelUIView;
             
-            _levelModel = levelModel;//TODO:
-            //_levelModel = ProjectContext.Container.Resolve<ILevelModel>();//TODO:
+            _levelModel = ProjectContext.Container.Resolve<ILevelModel>();
             
-            LoadLevel();//TODO:
             _goalHandler.OnLevelCompleted += HandleLevelCompleted;
             _goalHandler.OnLevelFailed += HandleLevelFailed;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -48,16 +45,17 @@ namespace MVP.Presenters
         private void HandleLevelCompleted()
         {
             _levelModel.LevelIndex++;
-            UTask.Wait(0.25f).Do(() => { _levelUIView.OpenSuccessPanel();});
+            UTask.Wait(0.5f).Do(() => { _levelUIView.OpenSuccessPanel();});
         }
 
         private void HandleLevelFailed()
         {
-            UTask.Wait(1f).Do(() => { _levelUIView.OpenFailPanel();});
+            UTask.Wait(0.5f).Do(() => { _levelUIView.OpenFailPanel();});
         }
 
         public async UniTask LoadLevel()
         {
+            _levelUIView.LevelText.text = $"LEVEL {_levelModel.LevelIndex}";
             var levelInfo = _levelModel.LoadLevel();
             _levelSetupHandler.Initialize(levelInfo);
             _goalHandler.Initialize(levelInfo.BusOrder.Length, levelInfo.Timer);

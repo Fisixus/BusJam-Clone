@@ -70,14 +70,14 @@ namespace MVP.Views
                 var levelTransitionHandler = ProjectContext.Container.Resolve<SceneTransitionHandler>();
 
                 // Perform scene transition
-                Debug.Log("Starting transition to MainScene...");
-                await scenePresenter.TransitionToNextScene("MainScene",
+                Debug.Log("Starting transition to StartScene...");
+                await scenePresenter.TransitionToNextScene("StartScene",
                     async (container) =>
                     {
                         // Specific setup logic for this scene
-                        await levelTransitionHandler.SetupLevelSceneRequirements(container);
+                        await levelTransitionHandler.SetupStartSceneRequirements(container);
                     });
-                Debug.Log("Transition to MainScene complete!");
+                Debug.Log("Transition to StartScene complete!");
             }
             catch (Exception e)
             {

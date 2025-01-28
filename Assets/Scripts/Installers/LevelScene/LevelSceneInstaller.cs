@@ -14,19 +14,9 @@ namespace Installers.LevelScene
 
         protected override void InstallBindings()
         {
-            Container.BindAsSingle(() => Container.Construct<ScenePresenter>());
-            //Container.BindAsSingle(() => Container.Construct<SceneTransitionHandler>());
-            Container.BindAsSingle<ILevelModel>(() => Container.Construct<LevelModel>());
             _handlerInstaller.Install(Container);
             _factoryInstaller.Install(Container);
             _mvpLevelInstaller.Install(Container);
-            
-            Container.BindAsSingleNonLazy(() => Container.Construct<StationPresenter>());
-            Container.BindAsSingleNonLazy(() => Container.Construct<LevelPresenter>());
-            Container.BindAsSingleNonLazy(() => Container.Construct<GamePresenter>());
-            
-
-            
         }
     }
 }

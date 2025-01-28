@@ -3281,6 +3281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4825b9479c489d4aaddf25b719d3041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cam: {fileID: 355856979}
+  _eventSystem: {fileID: 22873310}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

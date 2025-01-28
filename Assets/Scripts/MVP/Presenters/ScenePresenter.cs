@@ -9,7 +9,7 @@ namespace MVP.Presenters
 {
     public class ScenePresenter
     {
-        private const string LoadingSceneName = "LoadScene";
+        private const string LoadingSceneName = "LoadingScene";
 
         public async UniTask TransitionToNextScene(string nextScene, Func<Container, UniTask> setupTask)
         {

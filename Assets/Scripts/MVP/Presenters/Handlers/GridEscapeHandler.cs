@@ -20,8 +20,6 @@ namespace MVP.Presenters.Handlers
             { Direction.Right, new Vector2Int(1, 0) }   // Move right a column
         };
 
-        private Dictionary<Dummy, List<Vector2Int>> _escapePaths = new();
-        
         public void Initialize(Dummy[,] grid)
         {
             _grid = grid;
