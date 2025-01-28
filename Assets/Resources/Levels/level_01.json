@@ -1,8 +1,8 @@
 {
-       "level_number": 2,
-       "grid_width": 3,
-       "grid_height": 3,
-       "timer": 90,
-       "grid": ["y", "emp", "y", "y", "emp", "y", "y", "emp", "y"],
-       "bus_order":["y", "y"]
+       "level_number": 1,
+       "grid_width": 5,
+       "grid_height": 2,
+       "timer": 120,
+       "grid": ["r", "emp", "g", "g", "r", "b", "r", "g", "b", "b"],
+       "bus_order":["r", "g", "b"]
 }

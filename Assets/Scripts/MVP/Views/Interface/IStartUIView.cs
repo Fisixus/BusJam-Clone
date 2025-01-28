@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
-public class IStartUIView : MonoBehaviour
+namespace MVP.Views.Interface
 {
-    // Start is called before the first frame update
-    void Start()
+    public interface IStartUIView
     {
-        
-    }
+        public Button NewLevelButton { get; }
+        public TextMeshProUGUI LevelButtonText { get; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void SetLevelButtonText(int level, int maxLevel);
     }
 }
