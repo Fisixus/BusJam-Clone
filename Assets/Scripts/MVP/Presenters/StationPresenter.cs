@@ -108,7 +108,7 @@ namespace MVP.Presenters
             if (activeBus.AreAllSeatsTaken())
             {
                 _goalHandler.DecreaseBusCount();
-                UTask.Wait(1f).Do(() => _busSystemHandler.MoveBuses());
+                UTask.Wait(0.8f).Do(() => _busSystemHandler.MoveBuses());
                 //_busSystemHandler.MoveBuses();
             }
         }

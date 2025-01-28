@@ -67,14 +67,11 @@ namespace MVP.Presenters.Handlers
             if (_isLevelCompleted) return;
             if (AreAllBusesGone())
             {
-                Debug.Log("LevelCompleted!");
                 OnLevelCompleted?.Invoke();
                 _isLevelCompleted = true;
             }
             else if (IsTimeUp() || AreAllWaitingSpotsFull())
             {
-                Debug.Log("LevelFailed!");
-
                 OnLevelFailed?.Invoke();
                 _isLevelCompleted = true;
             }

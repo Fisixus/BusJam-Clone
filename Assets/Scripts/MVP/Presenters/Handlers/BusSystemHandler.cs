@@ -29,19 +29,20 @@ namespace MVP.Presenters.Handlers
 
             // Get the active bus (front of the queue)
             var activeBus = _busModel.BusQueue.Dequeue();
-            _busModel.BusQueue.Enqueue(activeBus); // Put it back in the queue
-
             List<Bus> buses = new List<Bus>(_busModel.BusQueue);
             _busModel.BusQueue.Clear(); // Temporarily clear queue to avoid modification issues
-
             MoveActiveBus(activeBus, color);
 
-            var animTime = 0.7f;
-            for (int i = 0; i < buses.Count - 1; i++)
+            var animTime = 0.8f;
+            for (int i = 0; i < buses.Count; i++)
             {
                 MoveBusToNextPosition(buses[i], animTime);
                 _busModel.BusQueue.Enqueue(buses[i]); // Re-add the bus after processing
             }
+            
+            _busModel.BusQueue.Enqueue(activeBus); // Put it back in the queue
+            Debug.Log(_busModel.BusQueue.Count);
+
             UTask.Wait(animTime).Do(()=>
             {
                 OnMoveDummiesFromWaitingSpots?.Invoke();
@@ -61,6 +62,7 @@ namespace MVP.Presenters.Handlers
                 activeBus.SetPosition(_busFactory.BusData, 0, false);
                 activeBus.SetAttributes(0, color);
                 activeBus.SetColor(_busFactory.ColorData);
+                if(color == ColorType.None) activeBus.gameObject.SetActive(false);
             });
         }
 
