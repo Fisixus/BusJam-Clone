@@ -6,27 +6,30 @@ using MVP.Models.Interface;
 using MVP.Presenters.Handlers;
 using MVP.Views.Interface;
 using UnityEngine.SceneManagement;
+using UTasks;
 
 namespace MVP.Presenters
 {
     public class LevelPresenter
     {
         private readonly LevelSetupHandler _levelSetupHandler;
-        //private readonly GoalHandler _goalHandler;
+        private readonly GoalHandler _goalHandler;
         //private readonly IGridView _gridView;
         private readonly ILevelModel _levelModel;
         private readonly ILevelUIView _levelUIView;
 
-        public LevelPresenter(LevelSetupHandler levelSetupHandler, ILevelUIView levelUIView, ILevelModel levelModel)
+        public LevelPresenter(LevelSetupHandler levelSetupHandler, GoalHandler goalHandler, ILevelUIView levelUIView, ILevelModel levelModel)
         {
             _levelSetupHandler = levelSetupHandler;
-            //_goalHandler = goalHandler;
+            _goalHandler = goalHandler;
             _levelUIView = levelUIView;
-            _levelModel = levelModel;
-            //_levelModel = ProjectContext.Container.Resolve<ILevelModel>();
+            
+            _levelModel = levelModel;//TODO:
+            //_levelModel = ProjectContext.Container.Resolve<ILevelModel>();//TODO:
+            
             LoadLevel();//TODO:
-            //_goalHandler.OnLevelCompleted += HandleLevelCompleted;
-            //_goalHandler.OnLevelFailed += HandleLevelFailed;
+            _goalHandler.OnLevelCompleted += HandleLevelCompleted;
+            _goalHandler.OnLevelFailed += HandleLevelFailed;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
@@ -37,29 +40,27 @@ namespace MVP.Presenters
 
         private void Dispose()
         {
-            //_goalHandler.OnLevelCompleted -= HandleLevelCompleted;
-            //_goalHandler.OnLevelFailed -= HandleLevelFailed;
+            _goalHandler.OnLevelCompleted -= HandleLevelCompleted;
+            _goalHandler.OnLevelFailed -= HandleLevelFailed;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         private void HandleLevelCompleted()
         {
             _levelModel.LevelIndex++;
-            //UTask.Wait(0.25f).Do(() => { _levelUIView.OpenSuccessPanel(); });
+            UTask.Wait(0.25f).Do(() => { _levelUIView.OpenSuccessPanel();});
         }
 
         private void HandleLevelFailed()
         {
-            //UTask.Wait(0.25f).Do(() => { _levelUIView.OpenFailPanel(); });
+            UTask.Wait(1f).Do(() => { _levelUIView.OpenFailPanel();});
         }
 
         public async UniTask LoadLevel()
         {
-            //var levelModel = ProjectContext.Container.Resolve<ILevelModel>();
             var levelInfo = _levelModel.LoadLevel();
-            //_gridView.CalculateGridSize(levelInfo.GridSize);
             _levelSetupHandler.Initialize(levelInfo);
-            //_goalHandler.Initialize(levelInfo.Goals, levelInfo.NumberOfMoves);
+            _goalHandler.Initialize(levelInfo.BusOrder.Length, levelInfo.Timer);
             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), DelayType.DeltaTime);
         }
 

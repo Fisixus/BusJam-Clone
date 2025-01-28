@@ -973,6 +973,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e708eadf56cc384789e01a9c2292794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LevelText>k__BackingField: {fileID: 573514819}
+  <TimerText>k__BackingField: {fileID: 247606921}
+  <RetryLevelButton>k__BackingField: {fileID: 717110536}
+  <NextLevelButton>k__BackingField: {fileID: 2001234051}
+  <SuccessPanelTr>k__BackingField: {fileID: 1230192541}
+  <FailPanelTr>k__BackingField: {fileID: 1805828537}
 --- !u!1 &340518683
 GameObject:
   m_ObjectHideFlags: 0

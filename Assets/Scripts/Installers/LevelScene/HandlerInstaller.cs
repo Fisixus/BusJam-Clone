@@ -7,6 +7,7 @@ namespace Installers.LevelScene
     {
         protected override void InstallBindings()
         {
+            Container.BindAsSingle(() => Container.Construct<GoalHandler>());
             Container.BindAsSingle(() => Container.Construct<LevelSetupHandler>());
             Container.BindAsSingle(() => Container.Construct<GridEscapeHandler>());
             Container.BindAsSingle(() => Container.Construct<BusSystemHandler>());

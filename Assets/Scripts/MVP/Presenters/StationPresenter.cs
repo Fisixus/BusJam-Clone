@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Core.Actors;
 using Core.Factories.Interface;
@@ -15,6 +16,7 @@ namespace MVP.Presenters
     {
         private readonly BusSystemHandler _busSystemHandler;
         private readonly GridEscapeHandler _gridEscapeHandler;
+        private readonly GoalHandler _goalHandler;
         private readonly IStationModel _stationModel;
         private readonly IBusModel _busModel;
         private readonly IDummyFactory _dummyFactory;
@@ -22,10 +24,12 @@ namespace MVP.Presenters
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler, IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
+        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler, GoalHandler goalHandler,
+            IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
         {
             _busSystemHandler = busSystemHandler;
             _gridEscapeHandler = gridEscapeHandler;
+            _goalHandler = goalHandler;
             _stationModel = stationModel;
             _busModel = busModel;
             _dummyFactory = dummyFactory;
@@ -70,17 +74,18 @@ namespace MVP.Presenters
             }
             else
             {
-                Vector3? waitingSpotPos = AssignToWaitingLine(touchedDummy);
-                if (waitingSpotPos.HasValue)
-                {
-                    worldPositions.Add(waitingSpotPos.Value);
-                }
+                Vector3? waitingSpotPos = AssignToWaitingSpot(touchedDummy);
+                if (!waitingSpotPos.HasValue) return;
+
+                worldPositions.Add(waitingSpotPos.Value);
                 touchedDummy.SetOutline(false);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
                 tween.OnComplete(() =>
                 {
                     touchedDummy.Navigator.SetAnimationState(DummyAnimations.Idle);
                     touchedDummy.Navigator.ResetRotation();
+                    
+                    _goalHandler.CheckLevelEndConditions();
                 });
             }
 
@@ -96,6 +101,7 @@ namespace MVP.Presenters
             activeBus.SitNextChair(_dummyFactory.ColorData);
             if (activeBus.IsBusFull())
             {
+                _goalHandler.DecreaseBusCount();
                 UTask.Wait(0.6f).Do(() => _busSystemHandler.MoveBuses());
                 //_busSystemHandler.MoveBuses();
             }
@@ -104,7 +110,7 @@ namespace MVP.Presenters
         private void TryMoveDummiesOnStopToBus()
         {
             var activeBus = _busModel.ActiveBus;
-            if(activeBus == null)return;//TODO: Could be the winning argument
+            if(activeBus == null) return;
             foreach (var spot in _stationModel.BusWaitingSpots)
             {
                 if(spot.Dummy is null) continue;//TODO:
@@ -167,18 +173,21 @@ namespace MVP.Presenters
             return false;
         }
 
+        
+
         /// <summary>
-        /// Assigns the dummy to a waiting line if the bus is full.
+        /// Assigns the dummy to a waiting line if there is an available spot.
         /// </summary>
-        private Vector3? AssignToWaitingLine(Dummy dummy)
+        private Vector3? AssignToWaitingSpot(Dummy dummy)
         {
+
             foreach (var busWaitingSpot in _stationModel.BusWaitingSpots)
             {
                 if (!busWaitingSpot.IsAvailable) continue;
 
                 busWaitingSpot.IsAvailable = false;
                 busWaitingSpot.Dummy = dummy;
-                
+
                 Vector3 worldPos = busWaitingSpot.transform.position;
                 worldPos.y = dummy.transform.position.y;
                 return worldPos;
