@@ -26,7 +26,7 @@ namespace MVP.Presenters.Handlers
         public void MoveBuses()
         {
             var color = _busFactory.GetNextColor() ?? ColorType.None;
-
+            if(_busModel.BusQueue.Count == 0) return;
             // Get the active bus (front of the queue)
             var activeBus = _busModel.BusQueue.Dequeue();
             List<Bus> buses = new List<Bus>(_busModel.BusQueue);

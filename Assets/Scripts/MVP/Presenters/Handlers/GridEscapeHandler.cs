@@ -37,7 +37,7 @@ namespace MVP.Presenters.Handlers
                 for (int row = 0; row < _rowCount; row++)
                 {
                     Vector2Int pos = new Vector2Int(col, row);
-                    if (_grid[col, row].IsLeft) continue;
+                    if (_grid[col, row].IsLeftGrid) continue;
 
                     List<Vector2Int> path = new List<Vector2Int>();
                     if (TryFindEscapePath(pos, path))
@@ -97,7 +97,7 @@ namespace MVP.Presenters.Handlers
                 Vector2Int next = current + direction.Value;
                 if (!IsWithinBounds(next.x, next.y)) continue;
 
-                if (_grid[next.x, next.y].IsLeft || _grid[next.x, next.y].Equals(targetDummy))
+                if (_grid[next.x, next.y].IsLeftGrid || _grid[next.x, next.y].Equals(targetDummy))
                 {
                     yield return next;
                 }
@@ -109,7 +109,7 @@ namespace MVP.Presenters.Handlers
         /// </summary>
         private bool IsExitPoint(Vector2Int pos)
         {
-            return pos.y == 0 && _grid[pos.x, pos.y].IsLeft;
+            return pos.y == 0 && _grid[pos.x, pos.y].IsLeftGrid;
         }
 
         /// <summary>

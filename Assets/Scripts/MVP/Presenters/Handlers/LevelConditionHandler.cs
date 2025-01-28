@@ -12,7 +12,7 @@ using UTasks;
 
 namespace MVP.Presenters.Handlers
 {
-    public class GoalHandler
+    public class LevelConditionHandler
     {
         private readonly ILevelUIView _levelUIView;
         private readonly IStationModel _stationModel;
@@ -28,7 +28,7 @@ namespace MVP.Presenters.Handlers
         private StringBuilder _timeStringBuilder = new StringBuilder();
         private bool _isRunning = false;
 
-        public GoalHandler(ILevelUIView levelUIView, IStationModel stationModel)
+        public LevelConditionHandler(ILevelUIView levelUIView, IStationModel stationModel)
         {
             _levelUIView = levelUIView;
             _stationModel = stationModel;
@@ -48,7 +48,12 @@ namespace MVP.Presenters.Handlers
         public void DecreaseBusCount()
         {
             _busCount--;
-            CheckLevelEndConditions();
+            
+            if (AreAllBusesGone() && !_isLevelCompleted)
+            {
+                HandleLevelSuccess();
+            }
+            //CheckLevelEndConditions();
         }
         
         private void StartTimer()
@@ -58,37 +63,37 @@ namespace MVP.Presenters.Handlers
             {
                 _timeLeft -= Time.deltaTime;
                 _levelUIView.TimerText.text = TimerHelper.FormatTime(_timeStringBuilder, (int)_timeLeft);
-                if(_timeLeft <= 0)
-                    CheckLevelEndConditions();
+                if (_timeLeft <= 0 && !_isLevelCompleted)
+                {
+                    HandleLevelFailure();
+                }
             });
         }
-        public void CheckLevelEndConditions()
+        
+        public void HandleLevelFailure()
         {
             if (_isLevelCompleted) return;
-            if (AreAllBusesGone())
-            {
-                OnLevelCompleted?.Invoke();
-                _isLevelCompleted = true;
-            }
-            else if (IsTimeUp() || AreAllWaitingSpotsFull())
-            {
-                OnLevelFailed?.Invoke();
-                _isLevelCompleted = true;
-            }
+
+            OnLevelFailed?.Invoke();
+            _isLevelCompleted = true;
         }
+        
+        public void HandleLevelSuccess()
+        {
+            if (_isLevelCompleted) return;
+
+            OnLevelCompleted?.Invoke();
+            _isLevelCompleted = true;
+        }
+        
         private bool AreAllBusesGone()
         {
             return _busCount <= 0;
         }
-        private bool IsTimeUp()
-        {
-            return _timeLeft <= 0f;
-        }
-        
         /// <summary>
         /// Checks if all waiting spots are occupied.
         /// </summary>
-        private bool AreAllWaitingSpotsFull()
+        public bool AreAllWaitingSpotsFull()
         {
             return _stationModel.BusWaitingSpots.All(spot => !spot.IsAvailable);
         }

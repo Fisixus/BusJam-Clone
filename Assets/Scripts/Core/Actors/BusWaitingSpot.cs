@@ -7,7 +7,6 @@ namespace Core.Actors
         [field: SerializeField] public int Order { get; set; }
         [field: SerializeField] public Dummy Dummy { get;  set; }
         [field: SerializeField] public bool IsAvailable { get;  set; }
-        [field: SerializeField] public bool IsLocked { get; private set; }
         
         public void SetStartPosition(float startX, Vector2 spacing)
         {

@@ -17,7 +17,7 @@ namespace MVP.Presenters
     {
         private readonly BusSystemHandler _busSystemHandler;
         private readonly GridEscapeHandler _gridEscapeHandler;
-        private readonly GoalHandler _goalHandler;
+        private readonly LevelConditionHandler _levelConditionHandler;
         private readonly IStationModel _stationModel;
         private readonly IBusModel _busModel;
         private readonly IDummyFactory _dummyFactory;
@@ -25,12 +25,12 @@ namespace MVP.Presenters
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler, GoalHandler goalHandler,
+        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler, LevelConditionHandler levelConditionHandler,
             IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
         {
             _busSystemHandler = busSystemHandler;
             _gridEscapeHandler = gridEscapeHandler;
-            _goalHandler = goalHandler;
+            _levelConditionHandler = levelConditionHandler;
             _stationModel = stationModel;
             _busModel = busModel;
             _dummyFactory = dummyFactory;
@@ -62,7 +62,7 @@ namespace MVP.Presenters
             }
 
             List<Vector3> worldPositions = ConvertPathToWorldPositions(path, touchedDummy);
-
+            touchedDummy.SetTouchAbility(false);
             if (CanBoardBus(touchedDummy, out Vector3 busDoorPos))
             {
                 worldPositions.Add(busDoorPos);
@@ -90,8 +90,14 @@ namespace MVP.Presenters
                 {
                     touchedDummy.Navigator.SetAnimationState(DummyAnimations.Idle);
                     touchedDummy.Navigator.ResetRotation();
-                    
-                    _goalHandler.CheckLevelEndConditions();
+                    if (!_levelConditionHandler.AreAllWaitingSpotsFull()) return;
+                    UTask.Wait(1.5f).Do(() =>
+                    {
+                        if (_levelConditionHandler.AreAllWaitingSpotsFull())
+                        {
+                            _levelConditionHandler.HandleLevelFailure();
+                        }
+                    });
                 });
             }
 
@@ -108,7 +114,7 @@ namespace MVP.Presenters
             activeBus.SitChair(_dummyFactory.ColorData, chair);
             if (activeBus.AreAllSeatsTaken())
             {
-                _goalHandler.DecreaseBusCount();
+                _levelConditionHandler.DecreaseBusCount();
                 UTask.Wait(0.8f).Do(() => _busSystemHandler.MoveBuses());
                 //_busSystemHandler.MoveBuses();
             }

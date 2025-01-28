@@ -353,10 +353,12 @@ MonoBehaviour:
   <Navigator>k__BackingField: {fileID: 6455416595882455979}
   <JointRenderer>k__BackingField: {fileID: 1007705708930288752}
   <SurfaceRenderer>k__BackingField: {fileID: 5064835931083944808}
+  <Collider>k__BackingField: {fileID: 2143642279511458215}
   <SurfaceOutline>k__BackingField: {fileID: 4640497325402918108}
   <Emoji>k__BackingField: {fileID: 853146007334052700}
   <Coordinate>k__BackingField: {x: 0, y: 0}
   <ColorType>k__BackingField: 0
+  <IsLeftGrid>k__BackingField: 0
 --- !u!114 &6455416595882455979
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,20 +13,20 @@ namespace MVP.Presenters
     public class LevelPresenter
     {
         private readonly LevelSetupHandler _levelSetupHandler;
-        private readonly GoalHandler _goalHandler;
+        private readonly LevelConditionHandler _levelConditionHandler;
         private readonly ILevelModel _levelModel;
         private readonly ILevelUIView _levelUIView;
 
-        public LevelPresenter(LevelSetupHandler levelSetupHandler, GoalHandler goalHandler, ILevelUIView levelUIView)
+        public LevelPresenter(LevelSetupHandler levelSetupHandler, LevelConditionHandler levelConditionHandler, ILevelUIView levelUIView)
         {
             _levelSetupHandler = levelSetupHandler;
-            _goalHandler = goalHandler;
+            _levelConditionHandler = levelConditionHandler;
             _levelUIView = levelUIView;
             
             _levelModel = ProjectContext.Container.Resolve<ILevelModel>();
             
-            _goalHandler.OnLevelCompleted += HandleLevelCompleted;
-            _goalHandler.OnLevelFailed += HandleLevelFailed;
+            _levelConditionHandler.OnLevelCompleted += HandleLevelCompleted;
+            _levelConditionHandler.OnLevelFailed += HandleLevelFailed;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
@@ -37,15 +37,15 @@ namespace MVP.Presenters
 
         private void Dispose()
         {
-            _goalHandler.OnLevelCompleted -= HandleLevelCompleted;
-            _goalHandler.OnLevelFailed -= HandleLevelFailed;
+            _levelConditionHandler.OnLevelCompleted -= HandleLevelCompleted;
+            _levelConditionHandler.OnLevelFailed -= HandleLevelFailed;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         private void HandleLevelCompleted()
         {
             _levelModel.LevelIndex++;
-            UTask.Wait(0.5f).Do(() => { _levelUIView.OpenSuccessPanel();});
+            UTask.Wait(1f).Do(() => { _levelUIView.OpenSuccessPanel();});
         }
 
         private void HandleLevelFailed()
@@ -58,7 +58,7 @@ namespace MVP.Presenters
             _levelUIView.LevelText.text = $"LEVEL {_levelModel.LevelIndex}";
             var levelInfo = _levelModel.LoadLevel();
             _levelSetupHandler.Initialize(levelInfo);
-            _goalHandler.Initialize(levelInfo.BusOrder.Length, levelInfo.Timer);
+            _levelConditionHandler.Initialize(levelInfo.BusOrder.Length, levelInfo.Timer);
             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), DelayType.DeltaTime);
         }
 

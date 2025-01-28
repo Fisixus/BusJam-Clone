@@ -11,12 +11,13 @@ namespace Core.Actors
         [field: SerializeField] public DummyNavigator Navigator { get; private set; }
         [field: SerializeField] public Renderer JointRenderer { get; private set; }
         [field: SerializeField] public Renderer SurfaceRenderer { get; private set; }
+        [field: SerializeField] public Collider Collider { get; private set; }
         [field: SerializeField] public Outline SurfaceOutline { get; private set; }
         [field: SerializeField] public SpriteRenderer Emoji { get; private set; }
         [field: SerializeField] public Vector2Int Coordinate { get; set; }
         [field: SerializeField] public ColorType ColorType { get; set; }
 
-        [field: SerializeField] public bool IsLeft { get; set; }
+        [field: SerializeField] public bool IsLeftGrid { get; set; }
 
         private Sequence _emojiSeq;
         
@@ -31,18 +32,23 @@ namespace Core.Actors
             Coordinate = newCoord;
             ColorType = colorType;
             SetOutline(false);
-            if (IsLeft || ColorType == ColorType.None)
+            if (IsLeftGrid || ColorType == ColorType.None)
             {
-                IsLeft = true;
+                IsLeftGrid = true;
                 this.gameObject.SetActive(false);
             }
             name = ToString();
+        }
+
+        public void SetTouchAbility(bool isTouchable)
+        {
+            Collider.enabled = isTouchable;
         }
         
         public void ResetAttributes()
         {
             Coordinate = -Vector2Int.one;
-            IsLeft = true;
+            IsLeftGrid = true;
         }
 
         public void SetColor(ColorDataSO colorData)
