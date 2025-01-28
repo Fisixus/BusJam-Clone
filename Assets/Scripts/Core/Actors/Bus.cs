@@ -55,6 +55,14 @@ namespace Core.Actors
         {
             return BusChairs.All(chair => !chair.IsAvailable);
         }
+        
+        /// <summary>
+        /// Checks if the dummies are sitting on the chairs.
+        /// </summary>
+        public bool AreAllSeatsTaken()
+        {
+            return BusChairs.All(chair => chair.ChairOwner.gameObject.activeSelf);
+        }
 
         /// <summary>
         /// Finds the next available chair in the active bus.
@@ -64,13 +72,12 @@ namespace Core.Actors
             return BusChairs.FirstOrDefault(chair => chair.IsAvailable);
         }
         
-        public void SitNextChair(ColorDataSO colorData)
+        public void SitChair(ColorDataSO colorData, BusChair chair)
         {
-            BusChair nextChair = GetNextAvailableChair();
-            if (nextChair != null)
+            if (chair != null)
             {
-                nextChair.IsAvailable = false;
-                nextChair.SetChairOwner(ColorType,colorData);
+                //nextChair.IsAvailable = false;
+                chair.SetChairOwner(ColorType,colorData);
             }
         }
         

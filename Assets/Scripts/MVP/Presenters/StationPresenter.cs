@@ -34,7 +34,7 @@ namespace MVP.Presenters
             _busModel = busModel;
             _dummyFactory = dummyFactory;
 
-            _busSystemHandler.OnMoveDummiesFromWaitingSpots += TryMoveDummiesOnStopToBus;
+            _busSystemHandler.OnMoveDummiesFromWaitingSpots += TryMoveDummiesOnSpotToBus;
             UserInput.OnDummyTouched += OnTouch;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
@@ -47,7 +47,7 @@ namespace MVP.Presenters
         private void Dispose()
         {
             // Unsubscribe from static and instance events
-            _busSystemHandler.OnMoveDummiesFromWaitingSpots -= TryMoveDummiesOnStopToBus;
+            _busSystemHandler.OnMoveDummiesFromWaitingSpots -= TryMoveDummiesOnSpotToBus;
             UserInput.OnDummyTouched -= OnTouch;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
@@ -67,12 +67,17 @@ namespace MVP.Presenters
                 worldPositions.Add(busDoorPos);
                 touchedDummy.SetOutline(false);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
+                
+                var activeBus = _busModel.ActiveBus;
+                
+                var chair = activeBus.GetNextAvailableChair();
+                chair.IsAvailable = false;
                 tween.OnComplete(() =>
                 {
-                    HandleDummyBoarding(touchedDummy);
+                    HandleDummyBoarding(chair, touchedDummy);
                 });
             }
-            else
+            else //Go to waiting spots
             {
                 Vector3? waitingSpotPos = AssignToWaitingSpot(touchedDummy);
                 if (!waitingSpotPos.HasValue) return;
@@ -94,20 +99,21 @@ namespace MVP.Presenters
             HighlightRunnableDummies();
         }
 
-        private void HandleDummyBoarding(Dummy dummy)
+        private void HandleDummyBoarding(BusChair chair, Dummy dummy)
         {
             var activeBus = _busModel.ActiveBus;
+
             dummy.gameObject.SetActive(false);
-            activeBus.SitNextChair(_dummyFactory.ColorData);
-            if (activeBus.IsBusFull())
+            activeBus.SitChair(_dummyFactory.ColorData, chair);
+            if (activeBus.AreAllSeatsTaken())
             {
                 _goalHandler.DecreaseBusCount();
-                UTask.Wait(0.6f).Do(() => _busSystemHandler.MoveBuses());
+                UTask.Wait(1f).Do(() => _busSystemHandler.MoveBuses());
                 //_busSystemHandler.MoveBuses();
             }
         }
         
-        private void TryMoveDummiesOnStopToBus()
+        private void TryMoveDummiesOnSpotToBus()
         {
             var activeBus = _busModel.ActiveBus;
             if(activeBus == null) return;
@@ -122,9 +128,13 @@ namespace MVP.Presenters
                     List<Vector3> worldPositions = new List<Vector3> { waitingDummy.transform.position, doorPos };
                     var tween = waitingDummy.Navigator.MoveAlongPath(worldPositions);
                     spot.IsAvailable = true;
+                    
+                    var chair = activeBus.GetNextAvailableChair();
+                    chair.IsAvailable = false;
+                    
                     tween.OnComplete(() =>
                     {
-                        HandleDummyBoarding(waitingDummy);
+                        HandleDummyBoarding(chair, waitingDummy);
                         spot.Dummy = null;
                     });
                     
