@@ -58,7 +58,7 @@ namespace MVP.Presenters
             _levelUIView.LevelText.text = $"LEVEL {_levelModel.LevelIndex}";
             var levelInfo = _levelModel.LoadLevel();
             _levelSetupHandler.Initialize(levelInfo);
-            _levelConditionHandler.Initialize(levelInfo.BusOrder.Length, levelInfo.Timer);
+            _levelConditionHandler.Initialize(levelInfo.Buses.Length, levelInfo.Timer);
             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), DelayType.DeltaTime);
         }
 

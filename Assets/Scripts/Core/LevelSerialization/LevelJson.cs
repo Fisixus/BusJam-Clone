@@ -16,6 +16,7 @@ namespace Core.LevelSerialization
         public int grid_height;
         public int timer;
         public string[] grid;
+        public int bus_count;
         public string[] bus_order;
     }
 }

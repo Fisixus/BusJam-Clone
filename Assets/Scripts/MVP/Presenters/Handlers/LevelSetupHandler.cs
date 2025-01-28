@@ -34,7 +34,7 @@ namespace MVP.Presenters.Handlers
         {
             // Process the grid in a single loop
 
-            var busColors = levelInfo.BusOrder;
+            var busColors = levelInfo.Buses;
             var dummyColors = levelInfo.Dummies;
             var rows = dummyColors.GetLength(0);
             var cols = dummyColors.GetLength(1);

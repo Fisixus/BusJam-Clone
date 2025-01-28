@@ -89,5 +89,100 @@ namespace Core.LevelSerialization
             return (dummies, busOrder);
         }
         
+        public static JsonGridObjectType[,] ConvertGridDummiesToJsonObjectType(ColorType[,] gridObjectTypes)
+        {
+            JsonGridObjectType[,] jsonEnumResponses =
+                new JsonGridObjectType[gridObjectTypes.GetLength(0), gridObjectTypes.GetLength(1)];
+            for (int i = 0; i < gridObjectTypes.GetLength(0); ++i)
+            {
+                for (int j = 0; j < gridObjectTypes.GetLength(1); ++j)
+                {
+                    switch (gridObjectTypes[i, j])
+                    {
+                        case ColorType.Red:
+                            jsonEnumResponses[i, j] = JsonGridObjectType.r;
+                            break;
+                        case ColorType.Green:
+                            jsonEnumResponses[i, j] = JsonGridObjectType.g;
+                            break;
+                        case ColorType.Blue:
+                            jsonEnumResponses[i, j] = JsonGridObjectType.b;
+                            break;
+                        case ColorType.Yellow:
+                            jsonEnumResponses[i, j] = JsonGridObjectType.y;
+                            break;
+                        default:
+                            jsonEnumResponses[i, j] = JsonGridObjectType.emp;
+                            break;
+                    }
+                }
+            }
+
+            return jsonEnumResponses;
+        }
+        
+        public static JsonGridObjectType[] ConvertGridBusesToJsonObjectType(ColorType[] levelInfoBuses)
+        {
+            JsonGridObjectType[] jsonEnumResponses =
+                new JsonGridObjectType[levelInfoBuses.Length];
+            for (int j = 0; j < levelInfoBuses.Length; ++j)
+            {
+                switch (levelInfoBuses[j])
+                {
+                    case ColorType.Red:
+                        jsonEnumResponses[j] = JsonGridObjectType.r;
+                        break;
+                    case ColorType.Green:
+                        jsonEnumResponses[j] = JsonGridObjectType.g;
+                        break;
+                    case ColorType.Blue:
+                        jsonEnumResponses[j] = JsonGridObjectType.b;
+                        break;
+                    case ColorType.Yellow:
+                        jsonEnumResponses[j] = JsonGridObjectType.y;
+                        break;
+                    default:
+                        jsonEnumResponses[j] = JsonGridObjectType.emp;
+                        break;
+                }
+            }
+            return jsonEnumResponses;
+        }
+        
+        public static LevelJson ConvertToLevelJson(int gridWidth, int gridHeight, int timer, int busCount, JsonGridObjectType[] buses,
+            JsonGridObjectType[,] dummies)
+        {
+            LevelJson levelJson = new LevelJson
+            {
+                level_number = 0,
+                grid_width = gridWidth,
+                grid_height = gridHeight,
+                bus_count = busCount,
+                bus_order = new string[busCount],
+                timer = timer,
+                grid = new string[gridWidth * gridHeight]
+            };
+
+            for (int x = 0; x < gridHeight; x++)
+            {
+                for (int y = 0; y < gridWidth; y++)
+                {
+                    // Reverse the row order but keep elements in the same order within each row
+                    //int reversedRow = gridHeight - 1 - x;
+                    levelJson.grid[gridWidth + y] = dummies[x, y].ToString();
+                }
+            }
+            for (int x = 0; x < busCount; x++)
+            {
+                    // Reverse the row order but keep elements in the same order within each row
+                    //int reversedRow = gridHeight - 1 - x;
+                    levelJson.bus_order[x] = buses[x].ToString();
+            }
+
+            return levelJson;
+        }
+
+
+        
     }
 }
