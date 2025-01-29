@@ -51,7 +51,7 @@ namespace MVP.Presenters
 
         private void HandleLevelFailed()
         {
-            UTask.Wait(0.5f).Do(() => { _levelUIView.OpenFailPanel();});
+            UTask.Wait(0.25f).Do(() => { _levelUIView.OpenFailPanel();});
         }
 
         public async UniTask LoadLevel()

@@ -42,7 +42,7 @@ public class LevelEditorWindow : EditorWindow
             DrawDummyGridControls();
             DrawDummyGridTable();
             DrawGridBuses();
-            DrawApplyChangesButton();
+            DrawApplyChangesAndSaveButton();
         }
         
         #region Header and Controls
@@ -121,12 +121,17 @@ public class LevelEditorWindow : EditorWindow
         }
 
 
-        private void DrawApplyChangesButton()
+        private void DrawApplyChangesAndSaveButton()
         {
             if (GUILayout.Button("Apply Changes"))
             {
                 ApplyChanges();
             }
+            if (GUILayout.Button("Save Level"))
+            {
+                SaveLevel();
+            }
+
         }
 
         #endregion
@@ -201,6 +206,30 @@ public class LevelEditorWindow : EditorWindow
 
             Debug.Log("Level created successfully.");
         }
+        
+        private void SaveLevel()
+        {
+            var levelJson = LevelSerializer.ConvertToLevelJson(_gridWidth, _gridHeight, _timer, _busCount, _gridBuses, _gridDummies);
+            string levelData = JsonUtility.ToJson(levelJson, true);
+
+            // Ensure the Levels folder exists
+            string folderPath = "Assets/Resources/Levels";
+            if (!System.IO.Directory.Exists(folderPath))
+            {
+                System.IO.Directory.CreateDirectory(folderPath);
+            }
+
+            // Format level name as level_00, level_01, etc.
+            string levelFileName = $"level_{_levelNumber:D2}.json";
+            string fullPath = System.IO.Path.Combine(folderPath, levelFileName);
+
+            // Save the JSON data to a file
+            System.IO.File.WriteAllText(fullPath, levelData);
+            AssetDatabase.Refresh(); // Refresh Unity Asset Database to recognize the new file
+
+            Debug.Log($"Level {_levelNumber} saved successfully at {fullPath}");
+        }
+
 
         #endregion
         
