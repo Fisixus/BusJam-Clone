@@ -31,6 +31,8 @@ namespace MVP.Presenters.Handlers
         public Dictionary<Dummy, List<Vector2Int>> GetAllEscapePaths()
         {
             Dictionary<Dummy, List<Vector2Int>> escapePaths = new Dictionary<Dummy, List<Vector2Int>>();
+            Dictionary<Vector2Int, List<Vector2Int>>
+                memoizedPaths = new Dictionary<Vector2Int, List<Vector2Int>>(); // Memoization
 
             for (int col = 0; col < _columnCount; col++)
             {
@@ -39,10 +41,17 @@ namespace MVP.Presenters.Handlers
                     Vector2Int pos = new Vector2Int(col, row);
                     if (_grid[col, row].IsLeftGrid) continue;
 
+                    if (memoizedPaths.TryGetValue(pos, out List<Vector2Int> cachedPath))
+                    {
+                        escapePaths[_grid[col, row]] = new List<Vector2Int>(cachedPath);
+                        continue;
+                    }
+
                     List<Vector2Int> path = new List<Vector2Int>();
-                    if (TryFindEscapePath(pos, path))
+                    if (TryFindEscapePath(pos, path, memoizedPaths))
                     {
                         escapePaths[_grid[col, row]] = new List<Vector2Int>(path);
+                        memoizedPaths[pos] = path; // Store the shortest path in the memoization table
                     }
                 }
             }
@@ -51,9 +60,10 @@ namespace MVP.Presenters.Handlers
         }
 
         /// <summary>
-        /// Attempts to find an escape path for a dummy using BFS.
+        /// Attempts to find the shortest escape path using BFS with memoization.
         /// </summary>
-        private bool TryFindEscapePath(Vector2Int start, List<Vector2Int> path)
+        private bool TryFindEscapePath(Vector2Int start, List<Vector2Int> path,
+            Dictionary<Vector2Int, List<Vector2Int>> memoizedPaths)
         {
             if (start.y == 0) // Dummies in the first row escape immediately
             {
@@ -61,8 +71,16 @@ namespace MVP.Presenters.Handlers
                 return true;
             }
 
+            if (memoizedPaths.TryGetValue(start, out List<Vector2Int> cachedPath))
+            {
+                path.AddRange(cachedPath);
+                return true;
+            }
+
             Queue<(Vector2Int, List<Vector2Int>)> queue = new Queue<(Vector2Int, List<Vector2Int>)>();
+            HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
             queue.Enqueue((start, new List<Vector2Int> { start }));
+            visited.Add(start);
             var targetDummy = _grid[start.x, start.y];
 
             while (queue.Count > 0)
@@ -71,16 +89,20 @@ namespace MVP.Presenters.Handlers
 
                 foreach (Vector2Int next in GetValidNeighbors(current, targetDummy))
                 {
+                    if (visited.Contains(next)) continue;
+
                     List<Vector2Int> newPath = new List<Vector2Int>(currentPath) { next };
 
                     if (IsExitPoint(next))
                     {
                         path.Clear();
                         path.AddRange(newPath);
+                        memoizedPaths[start] = new List<Vector2Int>(newPath); // Store the computed path
                         return true;
                     }
 
                     queue.Enqueue((next, newPath));
+                    visited.Add(next);
                 }
             }
 
