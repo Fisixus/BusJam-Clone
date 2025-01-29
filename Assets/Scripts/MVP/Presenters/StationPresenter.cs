@@ -126,7 +126,7 @@ namespace MVP.Presenters
             if(activeBus == null) return;
             foreach (var spot in _stationModel.BusWaitingSpots)
             {
-                if(spot.Dummy is null) continue;//TODO:
+                //if(spot.Dummy is null) continue;
                 if (!spot.IsAvailable && spot.Dummy.ColorType == activeBus.ColorType)
                 {
                     var waitingDummy = spot.Dummy;
@@ -142,7 +142,7 @@ namespace MVP.Presenters
                     tween.OnComplete(() =>
                     {
                         HandleDummyBoarding(chair, waitingDummy);
-                        spot.Dummy = null;
+                        //spot.Dummy = null;
                     });
                     
                 }
@@ -173,7 +173,7 @@ namespace MVP.Presenters
         private bool CanBoardBus(Dummy dummy, out Vector3 busDoorPos)
         {
             var activeBus = _busModel.ActiveBus;
-            // If the bus still on move
+            // If the bus is still on the move
             if (DOTween.IsTweening(activeBus.transform))
             {
                 busDoorPos = -Vector3.one;

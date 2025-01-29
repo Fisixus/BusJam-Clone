@@ -54,6 +54,7 @@ namespace MVP.Presenters.Handlers
         /// </summary>
         private void MoveActiveBus(Bus activeBus, ColorType color)
         {
+            if(activeBus == null) return;
             var tween = activeBus.SetPosition(_busFactory.FinalLocationX);
             tween.OnComplete(() =>
             {
