@@ -2,7 +2,7 @@
        "level_number": 2,
        "grid_width": 3,
        "grid_height": 3,
-       "timer": 90,
+       "timer": 20,
        "grid": ["y", "emp", "y", "y", "emp", "y", "y", "emp", "y"],
        "bus_count":2,
        "bus_order":["y", "y"]

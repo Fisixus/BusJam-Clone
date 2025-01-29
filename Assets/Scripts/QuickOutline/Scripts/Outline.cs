@@ -275,6 +275,9 @@ namespace QuickOutline
 
       // Apply properties according to mode
       outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
+      // Set Render Queue lower than default sprite queue (3000)
+      outlineMaskMaterial.renderQueue = 2999;
+      outlineFillMaterial.renderQueue = 2999;
 
       switch (outlineMode) {
         case Mode.OutlineAll:
