@@ -27,6 +27,7 @@ namespace MVP.Presenters.Handlers
         private float _timeLeft;
         private StringBuilder _timeStringBuilder = new StringBuilder();
         private bool _isRunning = false;
+        private UTask _taskTimer;
 
         public LevelConditionHandler(ILevelUIView levelUIView, IStationModel stationModel)
         {
@@ -42,6 +43,7 @@ namespace MVP.Presenters.Handlers
             _timeLeft = _timeLimit;
             _isLevelCompleted = false;
             
+            _taskTimer?.Kill();
             StartTimer();
         }
 
@@ -59,7 +61,7 @@ namespace MVP.Presenters.Handlers
         private void StartTimer()
         {
             if (_isRunning) return; // Prevent duplicate coroutines
-            UTask.For(_timeLimit).Do(() =>
+            _taskTimer = UTask.For(_timeLimit).Do(() =>
             {
                 _timeLeft -= Time.deltaTime;
                 _levelUIView.TimerText.text = TimerHelper.FormatTime(_timeStringBuilder, (int)_timeLeft);

@@ -5,6 +5,7 @@ using DI.Contexts;
 using MVP.Models.Interface;
 using MVP.Presenters.Handlers;
 using MVP.Views.Interface;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UTasks;
 
@@ -58,15 +59,14 @@ namespace MVP.Presenters
             _levelUIView.LevelText.text = $"LEVEL {_levelModel.LevelIndex}";
             var levelInfo = _levelModel.LoadLevel();
             _levelSetupHandler.Initialize(levelInfo);
-            _levelConditionHandler.Initialize(levelInfo.Buses.Length, levelInfo.Timer);
+            _levelConditionHandler.Initialize(levelInfo.BusCount, levelInfo.Timer);
             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), DelayType.DeltaTime);
         }
 
         public void LoadFromLevelEditor(LevelInfo levelInfo)
         {
-            //_gridView.CalculateGridSize(levelInfo.GridSize);
             _levelSetupHandler.Initialize(levelInfo);
-            //_goalHandler.Initialize(levelInfo.Goals, levelInfo.NumberOfMoves);
+            _levelConditionHandler.Initialize(levelInfo.BusCount, levelInfo.Timer);
         }
     }
 }

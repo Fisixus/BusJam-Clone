@@ -30,6 +30,8 @@ namespace Core.Factories
 
         public void PopulateBuses(ColorType[] colorTypes, List<Bus> buses)
         {
+            _busColors = new();
+            
             foreach (var colorType in colorTypes)
             {
                 _busColors.Enqueue(colorType);

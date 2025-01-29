@@ -47,6 +47,7 @@ namespace MVP.Presenters.Handlers
             _dummyFactory.DestroyAllDummies();
             _gridFactory.DestroyAllGrids();
             _busFactory.DestroyAllBuses();
+            _waitingSpotFactory.DestroyAllWaitingSpots();
             
             _dummyFactory.PopulateDummies(dummyColors, dummies);
             _gridFactory.PopulateGrids(dummyColors, grids);

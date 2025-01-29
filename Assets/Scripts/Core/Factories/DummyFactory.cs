@@ -36,11 +36,11 @@ namespace Core.Factories
                 {
                     Vector2Int coordinate = new Vector2Int(i, j);
                     var colorType = colorTypes[j, i];
-                    var gridObject = GenerateDummy(colorType, coordinate);
-                    gridObject.SetStartPosition(startX, Spacing);
-                    if (gridObject != null)
+                    var dummy = GenerateDummy(colorType, coordinate);
+                    dummy.SetStartPosition(startX, Spacing);
+                    if (dummy != null)
                     {
-                        dummies.Add(gridObject);
+                        dummies.Add(dummy);
                     }
                 }
             }
@@ -49,6 +49,7 @@ namespace Core.Factories
         private Dummy GenerateDummy(ColorType colorType, Vector2Int dummyCoordinate)
         {
             var dummy = CreateObj();
+            dummy.IsLeftGrid = false;
             dummy.SetAttributes(dummyCoordinate, colorType);
             dummy.SetColor(ColorData);
             return dummy;

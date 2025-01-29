@@ -4,5 +4,6 @@
        "grid_height": 3,
        "timer": 15,
        "grid": ["emp", "emp", "emp", "b", "b", "emp", "b", "emp", "emp"],
+       "bus_count":1,
        "bus_order":["b"]
 }

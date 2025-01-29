@@ -22,6 +22,7 @@ namespace MVP.Models
         
         public void Initialize(List<Bus> buses)
         {
+            BusQueue = new Queue<Bus>();
             foreach (var bus in buses)
             {
                 BusQueue.Enqueue(bus);

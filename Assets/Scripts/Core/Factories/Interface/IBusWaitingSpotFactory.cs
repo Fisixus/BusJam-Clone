@@ -8,5 +8,6 @@ namespace Core.Factories.Interface
     {
         public Vector2 Spacing { get; }
         public void PopulateSpots(List<BusWaitingSpot> spots);
+        public void DestroyAllWaitingSpots();
     }
 }

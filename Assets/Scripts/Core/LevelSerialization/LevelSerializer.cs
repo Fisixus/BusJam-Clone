@@ -56,7 +56,7 @@ namespace Core.LevelSerialization
                 }
             }
             
-            var busOrder = new ColorType[levelJson.bus_order.Length];
+            var busOrder = new ColorType[levelJson.bus_count];
             gridIndex = 0;
             for (int i = 0; i < levelJson.bus_order.Length; ++i)
             {
@@ -167,9 +167,8 @@ namespace Core.LevelSerialization
             {
                 for (int y = 0; y < gridWidth; y++)
                 {
-                    // Reverse the row order but keep elements in the same order within each row
-                    //int reversedRow = gridHeight - 1 - x;
-                    levelJson.grid[gridWidth + y] = dummies[x, y].ToString();
+                    int index = (x * gridWidth) + y; // Correct indexing from 0 to (gridHeight * gridWidth - 1)
+                    levelJson.grid[index] = dummies[x, y].ToString();
                 }
             }
             for (int x = 0; x < busCount; x++)
