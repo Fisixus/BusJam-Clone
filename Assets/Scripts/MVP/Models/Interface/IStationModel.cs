@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Core;
 using Core.Actors;
 
 namespace MVP.Models.Interface

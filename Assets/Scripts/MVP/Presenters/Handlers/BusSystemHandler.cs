@@ -5,7 +5,6 @@ using Core.Actors;
 using Core.Factories.Interface;
 using DG.Tweening;
 using MVP.Models.Interface;
-using UnityEngine;
 using UTasks;
 
 namespace MVP.Presenters.Handlers
@@ -14,19 +13,19 @@ namespace MVP.Presenters.Handlers
     {
         private readonly IBusModel _busModel;
         private readonly IBusFactory _busFactory;
-        
+
         public event Action OnMoveDummiesFromWaitingSpots;
-        
+
         public BusSystemHandler(IBusModel busModel, IBusFactory busFactory)
         {
             _busModel = busModel;
             _busFactory = busFactory;
         }
-        
+
         public void MoveBuses()
         {
             var color = _busFactory.GetNextColor() ?? ColorType.None;
-            if(_busModel.BusQueue.Count == 0) return;
+            if (_busModel.BusQueue.Count == 0) return;
             // Get the active bus (front of the queue)
             var activeBus = _busModel.BusQueue.Dequeue();
             List<Bus> buses = new List<Bus>(_busModel.BusQueue);
@@ -39,10 +38,10 @@ namespace MVP.Presenters.Handlers
                 MoveBusToNextPosition(buses[i], animTime);
                 _busModel.BusQueue.Enqueue(buses[i]); // Re-add the bus after processing
             }
-            
+
             _busModel.BusQueue.Enqueue(activeBus); // Put it back in the queue
 
-            UTask.Wait(animTime).Do(()=>
+            UTask.Wait(animTime).Do(() =>
             {
                 OnMoveDummiesFromWaitingSpots?.Invoke();
                 //TryMoveDummiesOnStopToBus();
@@ -54,7 +53,7 @@ namespace MVP.Presenters.Handlers
         /// </summary>
         private void MoveActiveBus(Bus activeBus, ColorType color)
         {
-            if(activeBus == null) return;
+            if (activeBus == null) return;
             var tween = activeBus.SetPosition(_busFactory.FinalLocationX);
             tween.OnComplete(() =>
             {
@@ -62,7 +61,7 @@ namespace MVP.Presenters.Handlers
                 activeBus.SetPosition(_busFactory.BusData, 0, false);
                 activeBus.SetAttributes(0, color);
                 activeBus.SetColor(_busFactory.ColorData);
-                if(color == ColorType.None) activeBus.gameObject.SetActive(false);
+                if (color == ColorType.None) activeBus.gameObject.SetActive(false);
             });
         }
 
@@ -74,7 +73,6 @@ namespace MVP.Presenters.Handlers
             int newOrder = bus.Order + 1;
             bus.SetAttributes(newOrder, bus.ColorType);
             bus.SetPosition(_busFactory.BusData, newOrder, true, animTime);
-            
         }
     }
 }

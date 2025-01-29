@@ -8,11 +8,10 @@ namespace Core.Factories
 {
     public class GridFactory : ObjectFactory<Grid>, IGridFactory
     {
-        [field:SerializeField]
-        public Vector2 Spacing { get; private set; } = new Vector2(0.8f, 1.25f);
-        
+        [field: SerializeField] public Vector2 Spacing { get; private set; } = new Vector2(0.8f, 1.25f);
+
         private List<Grid> _allGrids = new();
-        
+
         public override void PreInitialize()
         {
             Pool = new ObjectPool<Grid>(ObjPrefab, ParentTr, 16);
@@ -22,7 +21,7 @@ namespace Core.Factories
         {
             var columns = colorTypes.GetLength(1);
             var rows = colorTypes.GetLength(0);
-            
+
             var startX = -((columns - 1) * Spacing.x) / 2;
             // Process the grid with column-to-row traversal
             for (int i = 0; i < columns; i++) // Columns
@@ -32,7 +31,7 @@ namespace Core.Factories
                     Vector2Int coordinate = new Vector2Int(i, j);
                     var gridObject = GenerateGrid(coordinate);
                     gridObject.SetStartPosition(startX, Spacing);
-                    
+
                     if (gridObject != null)
                     {
                         grids.Add(gridObject);
@@ -40,14 +39,14 @@ namespace Core.Factories
                 }
             }
         }
-        
+
         private Grid GenerateGrid(Vector2Int gridCoordinate)
         {
             var grid = CreateObj();
             grid.SetAttributes(gridCoordinate);
             return grid;
         }
-        
+
         public override Grid CreateObj()
         {
             var item = base.CreateObj();
@@ -68,6 +67,5 @@ namespace Core.Factories
             base.DestroyObjs(itemsToDestroy);
             _allGrids.Clear();
         }
-
     }
 }

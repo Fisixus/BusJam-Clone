@@ -15,7 +15,7 @@ namespace Input
         private static bool _isInputOn = true;
         public static event Action<Dummy> OnDummyTouched;
         private IA_User _iaUser;
-    
+
         private void Awake()
         {
             _iaUser = new IA_User(); // Instantiate the input actions class
@@ -58,7 +58,7 @@ namespace Input
             // Return true if any UI elements were hit, false otherwise
             return results.Count > 0;
         }
-    
+
         private void TouchItemNotifier(InputAction.CallbackContext context)
         {
             if (IsPointerOverUIObject() || !_isInputOn)

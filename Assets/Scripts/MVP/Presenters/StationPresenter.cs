@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Core;
 using Core.Actors;
 using Core.Factories.Interface;
@@ -25,7 +24,8 @@ namespace MVP.Presenters
 
         private Dictionary<Dummy, List<Vector2Int>> _runnableDummies = new();
 
-        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler, LevelConditionHandler levelConditionHandler,
+        public StationPresenter(BusSystemHandler busSystemHandler, GridEscapeHandler gridEscapeHandler,
+            LevelConditionHandler levelConditionHandler,
             IStationModel stationModel, IBusModel busModel, IDummyFactory dummyFactory)
         {
             _busSystemHandler = busSystemHandler;
@@ -52,7 +52,7 @@ namespace MVP.Presenters
             UserInput.OnDummyTouched -= OnTouch;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
-        
+
         private void OnTouch(Dummy touchedDummy)
         {
             if (!_runnableDummies.TryGetValue(touchedDummy, out var path) || path == null)
@@ -69,13 +69,10 @@ namespace MVP.Presenters
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
                 touchedDummy.SetTouchAbility(false);
                 var activeBus = _busModel.ActiveBus;
-                
+
                 var chair = activeBus.GetNextAvailableChair();
                 chair.IsAvailable = false;
-                tween.OnComplete(() =>
-                {
-                    HandleDummyBoarding(chair, touchedDummy);
-                });
+                tween.OnComplete(() => { HandleDummyBoarding(chair, touchedDummy); });
             }
             else //Go to waiting spots
             {
@@ -119,11 +116,11 @@ namespace MVP.Presenters
                 //_busSystemHandler.MoveBuses();
             }
         }
-        
+
         private void TryMoveDummiesOnSpotToBus()
         {
             var activeBus = _busModel.ActiveBus;
-            if(activeBus == null) return;
+            if (activeBus == null) return;
             foreach (var spot in _stationModel.BusWaitingSpots)
             {
                 //if(spot.Dummy is null) continue;
@@ -135,16 +132,15 @@ namespace MVP.Presenters
                     List<Vector3> worldPositions = new List<Vector3> { waitingDummy.transform.position, doorPos };
                     var tween = waitingDummy.Navigator.MoveAlongPath(worldPositions);
                     spot.IsAvailable = true;
-                    
+
                     var chair = activeBus.GetNextAvailableChair();
                     chair.IsAvailable = false;
-                    
+
                     tween.OnComplete(() =>
                     {
                         HandleDummyBoarding(chair, waitingDummy);
                         //spot.Dummy = null;
                     });
-                    
                 }
             }
         }
@@ -179,6 +175,7 @@ namespace MVP.Presenters
                 busDoorPos = -Vector3.one;
                 return false;
             }
+
             if (!activeBus.IsBusFull() && activeBus.ColorType == dummy.ColorType)
             {
                 busDoorPos = activeBus.DoorTr.position;
@@ -190,14 +187,12 @@ namespace MVP.Presenters
             return false;
         }
 
-        
 
         /// <summary>
         /// Assigns the dummy to a waiting line if there is an available spot.
         /// </summary>
         private Vector3? AssignToWaitingSpot(Dummy dummy)
         {
-
             foreach (var busWaitingSpot in _stationModel.BusWaitingSpots)
             {
                 if (!busWaitingSpot.IsAvailable) continue;
@@ -234,7 +229,5 @@ namespace MVP.Presenters
                 kv.Key.SetOutline(true);
             }
         }
-
-
     }
 }

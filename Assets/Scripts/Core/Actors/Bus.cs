@@ -13,15 +13,15 @@ namespace Core.Actors
         [field: SerializeField] public ColorType ColorType { get; set; }
         [field: SerializeField] public List<BusChair> BusChairs { get; set; }
         [field: SerializeField] public Transform DoorTr { get; set; }
-        
+
         public Tween SetPosition(float newLocalX, float animTime = 0.7f)
         {
             transform.DOKill();
             var tween = transform.DOLocalMoveX(newLocalX, animTime).SetEase(Ease.InQuad);
             return tween;
         }
-        
-        public void SetPosition(BusDataSO busData, int order, bool isAnimOn=false, float animTime = 0.7f)
+
+        public void SetPosition(BusDataSO busData, int order, bool isAnimOn = false, float animTime = 0.7f)
         {
             transform.DOKill();
             Order = order;
@@ -31,9 +31,11 @@ namespace Core.Actors
             }
             else
             {
-                transform.localPosition = new Vector3(busData.OrderXPositions[order],transform.localPosition.y, transform.localPosition.z);
+                transform.localPosition = new Vector3(busData.OrderXPositions[order], transform.localPosition.y,
+                    transform.localPosition.z);
             }
         }
+
         public void SetColor(ColorDataSO colorData)
         {
             foreach (var bRenderer in BusRenderers)
@@ -41,13 +43,14 @@ namespace Core.Actors
                 bRenderer.materials[1].color = colorData.Colors[ColorType];
             }
         }
+
         public void SetAttributes(int order, ColorType colorType)
         {
             Order = order;
             ColorType = colorType;
             name = ToString();
         }
-        
+
         /// <summary>
         /// Checks if the given bus is full.
         /// </summary>
@@ -55,7 +58,7 @@ namespace Core.Actors
         {
             return BusChairs.All(chair => !chair.IsAvailable);
         }
-        
+
         /// <summary>
         /// Checks if the dummies are sitting on the chairs.
         /// </summary>
@@ -71,16 +74,16 @@ namespace Core.Actors
         {
             return BusChairs.FirstOrDefault(chair => chair.IsAvailable);
         }
-        
+
         public void SitChair(ColorDataSO colorData, BusChair chair)
         {
             if (chair != null)
             {
                 //nextChair.IsAvailable = false;
-                chair.SetChairOwner(ColorType,colorData);
+                chair.SetChairOwner(ColorType, colorData);
             }
         }
-        
+
         public override string ToString()
         {
             return $"Bus:{ColorType}, Order:{Order}";

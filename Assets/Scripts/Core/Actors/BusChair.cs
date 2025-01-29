@@ -5,7 +5,7 @@ namespace Core.Actors
 {
     public class BusChair : MonoBehaviour
     {
-        [field: SerializeField] public bool IsAvailable { get;  set; }
+        [field: SerializeField] public bool IsAvailable { get; set; }
         [field: SerializeField] public ParticleSystem PlacingPS { get; set; }
         [field: SerializeField] public Dummy ChairOwner { get; set; }
 
@@ -14,7 +14,7 @@ namespace Core.Actors
             ChairOwner.gameObject.SetActive(false);
             IsAvailable = true;
         }
-        
+
         public void SetChairOwner(ColorType colorType, ColorDataSO colorData)
         {
             ChairOwner.gameObject.SetActive(true);

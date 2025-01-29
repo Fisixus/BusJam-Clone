@@ -7,19 +7,19 @@ namespace MVP.Models
     public class BusModel : IBusModel
     {
         public Queue<Bus> BusQueue { get; private set; } = new Queue<Bus>();
-        
+
         private Bus _activeBus;
 
         public Bus ActiveBus
         {
             get
             {
-                if(BusQueue.Count > 0)
+                if (BusQueue.Count > 0)
                     return BusQueue.Peek();
                 return null;
             }
         }
-        
+
         public void Initialize(List<Bus> buses)
         {
             BusQueue = new Queue<Bus>();

@@ -9,17 +9,14 @@ namespace Core.Factories
 {
     public class BusFactory : ObjectFactory<Bus>, IBusFactory
     {
-        [field: SerializeField]
-        public float FinalLocationX { get; private set; }
-        
-        [field: SerializeField]
-        public ColorDataSO ColorData { get; private set; }
-        [field: SerializeField]
-        public BusDataSO BusData { get; private set; }
-        
+        [field: SerializeField] public float FinalLocationX { get; private set; }
+
+        [field: SerializeField] public ColorDataSO ColorData { get; private set; }
+        [field: SerializeField] public BusDataSO BusData { get; private set; }
+
         private List<Bus> _allBuses = new();
         private Queue<ColorType> _busColors = new();
-        
+
         private const int BusPoolCount = 3;
 
         public override void PreInitialize()
@@ -31,14 +28,14 @@ namespace Core.Factories
         public void PopulateBuses(ColorType[] colorTypes, List<Bus> buses)
         {
             _busColors = new();
-            
+
             foreach (var colorType in colorTypes)
             {
                 _busColors.Enqueue(colorType);
             }
 
             var order = BusPoolCount - 1;
-            for (int i = Mathf.Min(BusPoolCount-1, colorTypes.Length-1); i >= 0; i--)
+            for (int i = Mathf.Min(BusPoolCount - 1, colorTypes.Length - 1); i >= 0; i--)
             {
                 var color = _busColors.Dequeue();
                 var bus = GenerateBus(color, order--);
@@ -51,7 +48,7 @@ namespace Core.Factories
             if (_busColors.Count == 0) return null;
             return _busColors.Dequeue();
         }
-        
+
         private Bus GenerateBus(ColorType colorType, int order)
         {
             var bus = CreateObj();
@@ -60,7 +57,7 @@ namespace Core.Factories
             bus.SetColor(ColorData);
             return bus;
         }
-        
+
         public override Bus CreateObj()
         {
             var bus = base.CreateObj();

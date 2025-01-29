@@ -1,20 +1,19 @@
 using System.Collections.Generic;
 using Core.Actors;
 using MVP.Models.Interface;
-using Grid = Core.Actors.Grid;
 
 namespace MVP.Models
 {
-    public class StationModel: IStationModel
+    public class StationModel : IStationModel
     {
         public Dummy[,] Dummies { get; private set; } // x:column, y:row
         public Grid[,] Grid { get; private set; } // x:column, y:row
-        public BusWaitingSpot[] BusWaitingSpots{ get; private set; }
-        
+        public BusWaitingSpot[] BusWaitingSpots { get; private set; }
+
         private int _columnCount;
         private int _rowCount;
-        
-        
+
+
         public void InitializeDummies(List<Dummy> dummies, int columns, int rows)
         {
             _columnCount = columns;
@@ -24,12 +23,11 @@ namespace MVP.Models
             {
                 for (int j = 0; j < _rowCount; j++) // Rows
                 {
-                    Dummies[i, j] = dummies[i * _rowCount + j]; 
+                    Dummies[i, j] = dummies[i * _rowCount + j];
                 }
             }
-
-            
         }
+
         public void InitializeGrids(List<Grid> grids, int columns, int rows)
         {
             _columnCount = columns;
@@ -39,7 +37,7 @@ namespace MVP.Models
             {
                 for (int j = 0; j < _rowCount; j++) // Rows
                 {
-                    Grid[i, j] = grids[i * _rowCount + j]; 
+                    Grid[i, j] = grids[i * _rowCount + j];
                 }
             }
         }

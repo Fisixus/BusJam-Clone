@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core.Factories.Interface
 {
-    public interface IBusWaitingSpotFactory:IFactory<BusWaitingSpot>
+    public interface IBusWaitingSpotFactory : IFactory<BusWaitingSpot>
     {
         public Vector2 Spacing { get; }
         public void PopulateSpots(List<BusWaitingSpot> spots);

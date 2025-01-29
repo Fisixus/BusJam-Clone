@@ -1,7 +1,6 @@
-
 using System.Collections.Generic;
-using Core;
 using Core.Actors;
+using Core.Helpers;
 using UnityEngine;
 
 namespace MVP.Presenters.Handlers
@@ -11,14 +10,15 @@ namespace MVP.Presenters.Handlers
         private Dummy[,] _grid;
         private int _rowCount;
         private int _columnCount;
-        
-        private static readonly Dictionary<Direction, Vector2Int> _directionOffsets = new Dictionary<Direction, Vector2Int>
-        {
-            { Direction.Up,    new Vector2Int(0, 1) },  // Move up a row
-            { Direction.Down,  new Vector2Int(0, -1) }, // Move down a row
-            { Direction.Left,  new Vector2Int(-1, 0) }, // Move left a column
-            { Direction.Right, new Vector2Int(1, 0) }   // Move right a column
-        };
+
+        private static readonly Dictionary<Direction, Vector2Int> _directionOffsets =
+            new Dictionary<Direction, Vector2Int>
+            {
+                { Direction.Up, new Vector2Int(0, 1) }, // Move up a row
+                { Direction.Down, new Vector2Int(0, -1) }, // Move down a row
+                { Direction.Left, new Vector2Int(-1, 0) }, // Move left a column
+                { Direction.Right, new Vector2Int(1, 0) } // Move right a column
+            };
 
         public void Initialize(Dummy[,] grid)
         {
@@ -55,7 +55,7 @@ namespace MVP.Presenters.Handlers
         /// </summary>
         private bool TryFindEscapePath(Vector2Int start, List<Vector2Int> path)
         {
-            if (start.y == 0)  // Dummies in the first row escape immediately
+            if (start.y == 0) // Dummies in the first row escape immediately
             {
                 path.Add(start);
                 return true;
@@ -119,7 +119,5 @@ namespace MVP.Presenters.Handlers
         {
             return col >= 0 && col < _columnCount && row >= 0 && row < _rowCount;
         }
-
-
     }
 }

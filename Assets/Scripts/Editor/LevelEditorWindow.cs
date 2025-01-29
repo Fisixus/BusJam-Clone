@@ -1,5 +1,4 @@
-using System;
-using Core;
+using System.IO;
 using Core.LevelSerialization;
 using DI.Contexts;
 using MVP.Helpers;
@@ -11,30 +10,30 @@ using UnityEngine.SceneManagement;
 
 namespace Editor
 {
-public class LevelEditorWindow : EditorWindow
+    public class LevelEditorWindow : EditorWindow
     {
         private int _levelNumber = 0;
         private int _gridWidth = 5;
         private int _gridHeight = 5;
 
         private int _timer = 60;
-        
+
         private JsonGridObjectType[,] _gridDummies;
-        
+
         private int _busCount = 3;
         private JsonGridObjectType[] _gridBuses;
-        
+
         [MenuItem("Tools/Level Editor")]
         public static void ShowWindow()
         {
             GetWindow<LevelEditorWindow>("Level Editor");
         }
-        
+
         private void OnEnable()
         {
             InitializeGrid();
         }
-        
+
         private void OnGUI()
         {
             DrawHeader();
@@ -44,7 +43,7 @@ public class LevelEditorWindow : EditorWindow
             DrawGridBuses();
             DrawApplyChangesAndSaveButton();
         }
-        
+
         #region Header and Controls
 
         private void DrawHeader()
@@ -75,7 +74,7 @@ public class LevelEditorWindow : EditorWindow
                 _gridWidth = newGridWidth;
                 _gridHeight = newGridHeight;
             }
-            
+
             if (_gridBuses == null || _gridBuses.Length != _busCount)
             {
                 ResizeBusArray(_busCount);
@@ -103,7 +102,7 @@ public class LevelEditorWindow : EditorWindow
                 EditorGUILayout.EndHorizontal();
             }
         }
-        
+
         private void DrawGridBuses()
         {
             EditorGUILayout.LabelField("Grid Buses", EditorStyles.boldLabel);
@@ -113,7 +112,7 @@ public class LevelEditorWindow : EditorWindow
                 Debug.LogWarning("Buses not initialized. Initializing with default values.");
                 _gridBuses = new JsonGridObjectType[_busCount];
             }
-            
+
             for (int i = 0; i < _gridBuses.Length; i++)
             {
                 _gridBuses[i] = (JsonGridObjectType)EditorGUILayout.EnumPopup($"Bus {i}", _gridBuses[i]);
@@ -127,15 +126,15 @@ public class LevelEditorWindow : EditorWindow
             {
                 ApplyChanges();
             }
+
             if (GUILayout.Button("Save Level"))
             {
                 SaveLevel();
             }
-
         }
 
         #endregion
-        
+
         #region Level Logic
 
         private void InitializeGrid()
@@ -173,7 +172,7 @@ public class LevelEditorWindow : EditorWindow
             var gridData = LevelSerializer.ConvertGridDummiesToJsonObjectType(levelInfo.Dummies);
             ResizeGrid(_gridHeight, _gridWidth);
             PopulateGrid(gridData);
-            
+
             var busData = LevelSerializer.ConvertGridBusesToJsonObjectType(levelInfo.Buses);
             ResizeBusArray(_busCount);
             PopulateBuses(busData);
@@ -183,7 +182,8 @@ public class LevelEditorWindow : EditorWindow
 
         private void ApplyChanges()
         {
-            var levelJson = LevelSerializer.ConvertToLevelJson(_gridWidth, _gridHeight, _timer, _busCount,_gridBuses, _gridDummies);
+            var levelJson = LevelSerializer.ConvertToLevelJson(_gridWidth, _gridHeight, _timer, _busCount, _gridBuses,
+                _gridDummies);
             var (gridObjectTypes, levelGoals) = LevelSerializer.ProcessLevelJson(levelJson);
 
             var levelInfo = new LevelInfo(levelJson.level_number, gridObjectTypes, levelGoals, levelJson.timer);
@@ -206,33 +206,33 @@ public class LevelEditorWindow : EditorWindow
 
             Debug.Log("Level created successfully.");
         }
-        
+
         private void SaveLevel()
         {
-            var levelJson = LevelSerializer.ConvertToLevelJson(_gridWidth, _gridHeight, _timer, _busCount, _gridBuses, _gridDummies);
+            var levelJson = LevelSerializer.ConvertToLevelJson(_gridWidth, _gridHeight, _timer, _busCount, _gridBuses,
+                _gridDummies);
             string levelData = JsonUtility.ToJson(levelJson, true);
 
             // Ensure the Levels folder exists
             string folderPath = "Assets/Resources/Levels";
-            if (!System.IO.Directory.Exists(folderPath))
+            if (!Directory.Exists(folderPath))
             {
-                System.IO.Directory.CreateDirectory(folderPath);
+                Directory.CreateDirectory(folderPath);
             }
 
             // Format level name as level_00, level_01, etc.
             string levelFileName = $"level_{_levelNumber:D2}.json";
-            string fullPath = System.IO.Path.Combine(folderPath, levelFileName);
+            string fullPath = Path.Combine(folderPath, levelFileName);
 
             // Save the JSON data to a file
-            System.IO.File.WriteAllText(fullPath, levelData);
+            File.WriteAllText(fullPath, levelData);
             AssetDatabase.Refresh(); // Refresh Unity Asset Database to recognize the new file
 
             Debug.Log($"Level {_levelNumber} saved successfully at {fullPath}");
         }
 
-
         #endregion
-        
+
         #region Grid Management
 
         private void ResizeGrid(int newHeight, int newWidth)
@@ -264,6 +264,7 @@ public class LevelEditorWindow : EditorWindow
             _gridHeight = newHeight;
             _gridWidth = newWidth;
         }
+
         private void ResizeBusArray(int newSize)
         {
             if (newSize <= 0)
@@ -295,7 +296,7 @@ public class LevelEditorWindow : EditorWindow
                 }
             }
         }
-        
+
         private void PopulateBuses(JsonGridObjectType[] busData)
         {
             for (int i = 0; i < _busCount; i++)
@@ -305,7 +306,7 @@ public class LevelEditorWindow : EditorWindow
         }
 
         #endregion
-        
+
         #region Utility Methods
 
         private static bool IsLevelSceneActive()

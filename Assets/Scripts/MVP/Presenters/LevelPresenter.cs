@@ -5,7 +5,6 @@ using DI.Contexts;
 using MVP.Models.Interface;
 using MVP.Presenters.Handlers;
 using MVP.Views.Interface;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using UTasks;
 
@@ -18,14 +17,15 @@ namespace MVP.Presenters
         private readonly ILevelModel _levelModel;
         private readonly ILevelUIView _levelUIView;
 
-        public LevelPresenter(LevelSetupHandler levelSetupHandler, LevelConditionHandler levelConditionHandler, ILevelUIView levelUIView)
+        public LevelPresenter(LevelSetupHandler levelSetupHandler, LevelConditionHandler levelConditionHandler,
+            ILevelUIView levelUIView)
         {
             _levelSetupHandler = levelSetupHandler;
             _levelConditionHandler = levelConditionHandler;
             _levelUIView = levelUIView;
-            
+
             _levelModel = ProjectContext.Container.Resolve<ILevelModel>();
-            
+
             _levelConditionHandler.OnLevelCompleted += HandleLevelCompleted;
             _levelConditionHandler.OnLevelFailed += HandleLevelFailed;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -46,12 +46,12 @@ namespace MVP.Presenters
         private void HandleLevelCompleted()
         {
             _levelModel.LevelIndex++;
-            UTask.Wait(1f).Do(() => { _levelUIView.OpenSuccessPanel();});
+            UTask.Wait(1f).Do(() => { _levelUIView.OpenSuccessPanel(); });
         }
 
         private void HandleLevelFailed()
         {
-            UTask.Wait(0.25f).Do(() => { _levelUIView.OpenFailPanel();});
+            UTask.Wait(0.25f).Do(() => { _levelUIView.OpenFailPanel(); });
         }
 
         public async UniTask LoadLevel()

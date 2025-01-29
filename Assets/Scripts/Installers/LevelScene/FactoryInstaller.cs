@@ -1,9 +1,7 @@
-using Core.Actors;
 using Core.Factories;
 using Core.Factories.Interface;
 using DI;
 using UnityEngine;
-using Grid = Core.Actors.Grid;
 
 namespace Installers.LevelScene
 {

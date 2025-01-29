@@ -19,7 +19,7 @@ namespace MVP.Views
         [field: SerializeField] public Button NextLevelButton { get; private set; }
         [field: SerializeField] public Transform SuccessPanelTr { get; private set; }
         [field: SerializeField] public Transform FailPanelTr { get; private set; }
-        
+
         private void Awake()
         {
             RetryLevelButton.onClick.AddListener(() => { RetryLevel().Forget(); });
@@ -31,6 +31,7 @@ namespace MVP.Views
             RetryLevelButton.onClick.RemoveAllListeners();
             NextLevelButton.onClick.RemoveAllListeners();
         }
+
         private async UniTask RetryLevel()
         {
             try
@@ -57,7 +58,7 @@ namespace MVP.Views
                 throw new Exception("Error in RetryLevel transition", e);
             }
         }
-        
+
         public async UniTask NextLevel()
         {
             try
@@ -89,6 +90,7 @@ namespace MVP.Views
         {
             TogglePanel(SuccessPanelTr, true, duration).Forget();
         }
+
         public void CloseSuccessPanel(float duration)
         {
             TogglePanel(SuccessPanelTr, false, duration).Forget();
@@ -103,7 +105,7 @@ namespace MVP.Views
         {
             TogglePanel(FailPanelTr, false, duration).Forget();
         }
-        
+
         private async UniTask TogglePanel(Transform panelTransform, bool isOpen, float duration)
         {
             var cg = panelTransform.GetComponent<CanvasGroup>();

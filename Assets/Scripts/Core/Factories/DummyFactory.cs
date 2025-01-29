@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using AYellowpaper.SerializedCollections;
 using Core.Actors;
 using Core.Actors.Data;
 using Core.Factories.Interface;
@@ -10,19 +9,18 @@ namespace Core.Factories
 {
     public class DummyFactory : ObjectFactory<Dummy>, IDummyFactory
     {
-        [field: SerializeField]
-        public ColorDataSO ColorData { get; private set; }
+        [field: SerializeField] public ColorDataSO ColorData { get; private set; }
 
-        [field:SerializeField]
-        public Vector2 Spacing { get; private set; } = new Vector2(0.8f, 1.25f);
-        
+        [field: SerializeField] public Vector2 Spacing { get; private set; } = new Vector2(0.8f, 1.25f);
+
         private List<Dummy> _allDummies = new();
+
         public override void PreInitialize()
         {
             Pool = new ObjectPool<Dummy>(ObjPrefab, ParentTr, 16);
             _allDummies = new List<Dummy>(16);
         }
-        
+
         public void PopulateDummies(ColorType[,] colorTypes, List<Dummy> dummies)
         {
             var columns = colorTypes.GetLength(1);
@@ -45,7 +43,7 @@ namespace Core.Factories
                 }
             }
         }
-        
+
         private Dummy GenerateDummy(ColorType colorType, Vector2Int dummyCoordinate)
         {
             var dummy = CreateObj();

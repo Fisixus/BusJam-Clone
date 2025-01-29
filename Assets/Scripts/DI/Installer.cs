@@ -1,9 +1,8 @@
-
 using UnityEngine;
 
 namespace DI
 {
-    public abstract class Installer: MonoBehaviour
+    public abstract class Installer : MonoBehaviour
     {
         protected Container Container { get; private set; }
 
@@ -16,4 +15,3 @@ namespace DI
         protected abstract void InstallBindings();
     }
 }
-

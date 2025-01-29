@@ -1,7 +1,7 @@
 using Core.Actors.Ability;
 using Core.Actors.Data;
 using DG.Tweening;
-using QuickOutline;
+using QuickOutline.Scripts;
 using UnityEngine;
 
 namespace Core.Actors
@@ -20,13 +20,13 @@ namespace Core.Actors
         [field: SerializeField] public bool IsLeftGrid { get; set; }
 
         private Sequence _emojiSeq;
-        
+
         public void SetStartPosition(float startX, Vector2 spacing)
         {
             transform.localPosition = new Vector3(startX + Coordinate.x * spacing.x, transform.localPosition.y,
                 Coordinate.y * -spacing.y);
         }
-        
+
         public void SetAttributes(Vector2Int newCoord, ColorType colorType)
         {
             Coordinate = newCoord;
@@ -37,6 +37,7 @@ namespace Core.Actors
                 IsLeftGrid = true;
                 this.gameObject.SetActive(false);
             }
+
             name = ToString();
         }
 
@@ -44,7 +45,7 @@ namespace Core.Actors
         {
             Collider.enabled = isTouchable;
         }
-        
+
         public void ResetAttributes()
         {
             Coordinate = -Vector2Int.one;
@@ -56,7 +57,7 @@ namespace Core.Actors
             JointRenderer.material.color = colorData.Colors[ColorType];
             SurfaceRenderer.material.color = colorData.Colors[ColorType];
         }
-        
+
         public void SetOutline(bool isOn)
         {
             SurfaceOutline.OutlineWidth = isOn ? 4 : 0;
@@ -73,12 +74,10 @@ namespace Core.Actors
                 .Join(Emoji.DOFade(0, 0.15f));
         }
 
-        
+
         public override string ToString()
         {
             return $"Dummy:{ColorType}, Column{Coordinate.x},Row{Coordinate.y}";
         }
-
-
     }
 }

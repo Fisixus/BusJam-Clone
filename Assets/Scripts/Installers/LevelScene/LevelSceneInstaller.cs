@@ -1,7 +1,4 @@
 using DI;
-using MVP.Models;
-using MVP.Models.Interface;
-using MVP.Presenters;
 using UnityEngine;
 
 namespace Installers.LevelScene

@@ -8,8 +8,8 @@ namespace Core.Actors.Ability
     public class DummyNavigator : MonoBehaviour
     {
         [field: SerializeField] public Animator Animator { get; private set; }
-        [field: SerializeField] public float Speed { get; private set; } = 2f;  // Speed in units per second
-        
+        [field: SerializeField] public float Speed { get; private set; } = 2f; // Speed in units per second
+
         private Quaternion _originalRotation; // Store original rotation
 
         private void Start()
@@ -34,7 +34,7 @@ namespace Core.Actors.Ability
                     throw new ArgumentOutOfRangeException(nameof(animState), animState, null);
             }
         }
-        
+
         public Tween MoveAlongPath(List<Vector3> path)
         {
             if (path == null || path.Count < 2) return null;
@@ -55,6 +55,7 @@ namespace Core.Actors.Ability
             {
                 distance += Vector3.Distance(path[i], path[i + 1]);
             }
+
             return distance;
         }
 

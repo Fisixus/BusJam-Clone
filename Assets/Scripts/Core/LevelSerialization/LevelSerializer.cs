@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Core.LevelSerialization
 {
@@ -55,7 +53,7 @@ namespace Core.LevelSerialization
                         break;
                 }
             }
-            
+
             var busOrder = new ColorType[levelJson.bus_count];
             gridIndex = 0;
             for (int i = 0; i < levelJson.bus_order.Length; ++i)
@@ -83,12 +81,11 @@ namespace Core.LevelSerialization
                         //TODO: Throw exception
                         break;
                 }
-                
             }
 
             return (dummies, busOrder);
         }
-        
+
         public static JsonGridObjectType[,] ConvertGridDummiesToJsonObjectType(ColorType[,] gridObjectTypes)
         {
             JsonGridObjectType[,] jsonEnumResponses =
@@ -120,7 +117,7 @@ namespace Core.LevelSerialization
 
             return jsonEnumResponses;
         }
-        
+
         public static JsonGridObjectType[] ConvertGridBusesToJsonObjectType(ColorType[] levelInfoBuses)
         {
             JsonGridObjectType[] jsonEnumResponses =
@@ -146,10 +143,12 @@ namespace Core.LevelSerialization
                         break;
                 }
             }
+
             return jsonEnumResponses;
         }
-        
-        public static LevelJson ConvertToLevelJson(int gridWidth, int gridHeight, int timer, int busCount, JsonGridObjectType[] buses,
+
+        public static LevelJson ConvertToLevelJson(int gridWidth, int gridHeight, int timer, int busCount,
+            JsonGridObjectType[] buses,
             JsonGridObjectType[,] dummies)
         {
             LevelJson levelJson = new LevelJson
@@ -171,17 +170,15 @@ namespace Core.LevelSerialization
                     levelJson.grid[index] = dummies[x, y].ToString();
                 }
             }
+
             for (int x = 0; x < busCount; x++)
             {
-                    // Reverse the row order but keep elements in the same order within each row
-                    //int reversedRow = gridHeight - 1 - x;
-                    levelJson.bus_order[x] = buses[x].ToString();
+                // Reverse the row order but keep elements in the same order within each row
+                //int reversedRow = gridHeight - 1 - x;
+                levelJson.bus_order[x] = buses[x].ToString();
             }
 
             return levelJson;
         }
-
-
-        
     }
 }

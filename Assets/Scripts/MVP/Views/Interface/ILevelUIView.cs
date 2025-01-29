@@ -9,7 +9,7 @@ namespace MVP.Views.Interface
         public Button NextLevelButton { get; }
         public Button RetryLevelButton { get; }
         public TextMeshProUGUI LevelText { get; }
-        public TextMeshProUGUI TimerText { get;  }
+        public TextMeshProUGUI TimerText { get; }
         public Transform SuccessPanelTr { get; }
         public Transform FailPanelTr { get; }
 

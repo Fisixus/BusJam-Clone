@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Core.Actors;
 using MVP.Helpers;
 using MVP.Models.Interface;
 using MVP.Views.Interface;
@@ -16,14 +13,14 @@ namespace MVP.Presenters.Handlers
     {
         private readonly ILevelUIView _levelUIView;
         private readonly IStationModel _stationModel;
-        
+
         public event Action OnLevelCompleted;
         public event Action OnLevelFailed;
-        
+
         private float _timeLimit;
         private int _busCount;
         private bool _isLevelCompleted;
-        
+
         private float _timeLeft;
         private StringBuilder _timeStringBuilder = new StringBuilder();
         private bool _isRunning = false;
@@ -34,7 +31,7 @@ namespace MVP.Presenters.Handlers
             _levelUIView = levelUIView;
             _stationModel = stationModel;
         }
-        
+
         public void Initialize(int busCount, float levelTimeInSeconds)
         {
             // Clone the provided goals into the internal goals array
@@ -42,7 +39,7 @@ namespace MVP.Presenters.Handlers
             _timeLimit = levelTimeInSeconds;
             _timeLeft = _timeLimit;
             _isLevelCompleted = false;
-            
+
             _taskTimer?.Kill();
             StartTimer();
         }
@@ -50,14 +47,14 @@ namespace MVP.Presenters.Handlers
         public void DecreaseBusCount()
         {
             _busCount--;
-            
+
             if (AreAllBusesGone() && !_isLevelCompleted)
             {
                 HandleLevelSuccess();
             }
             //CheckLevelEndConditions();
         }
-        
+
         private void StartTimer()
         {
             if (_isRunning) return; // Prevent duplicate coroutines
@@ -71,7 +68,7 @@ namespace MVP.Presenters.Handlers
                 }
             });
         }
-        
+
         public void HandleLevelFailure()
         {
             if (_isLevelCompleted) return;
@@ -79,7 +76,7 @@ namespace MVP.Presenters.Handlers
             OnLevelFailed?.Invoke();
             _isLevelCompleted = true;
         }
-        
+
         public void HandleLevelSuccess()
         {
             if (_isLevelCompleted) return;
@@ -87,11 +84,12 @@ namespace MVP.Presenters.Handlers
             OnLevelCompleted?.Invoke();
             _isLevelCompleted = true;
         }
-        
+
         private bool AreAllBusesGone()
         {
             return _busCount <= 0;
         }
+
         /// <summary>
         /// Checks if all waiting spots are occupied.
         /// </summary>
@@ -99,6 +97,5 @@ namespace MVP.Presenters.Handlers
         {
             return _stationModel.BusWaitingSpots.All(spot => !spot.IsAvailable);
         }
-        
     }
 }
