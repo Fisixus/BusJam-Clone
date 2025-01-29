@@ -62,13 +62,12 @@ namespace MVP.Presenters
             }
 
             List<Vector3> worldPositions = ConvertPathToWorldPositions(path, touchedDummy);
-            touchedDummy.SetTouchAbility(false);
             if (CanBoardBus(touchedDummy, out Vector3 busDoorPos))
             {
                 worldPositions.Add(busDoorPos);
                 touchedDummy.SetOutline(false);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
-                
+                touchedDummy.SetTouchAbility(false);
                 var activeBus = _busModel.ActiveBus;
                 
                 var chair = activeBus.GetNextAvailableChair();
@@ -86,12 +85,13 @@ namespace MVP.Presenters
                 worldPositions.Add(waitingSpotPos.Value);
                 touchedDummy.SetOutline(false);
                 var tween = touchedDummy.Navigator.MoveAlongPath(worldPositions);
+                touchedDummy.SetTouchAbility(false);
                 tween.OnComplete(() =>
                 {
                     touchedDummy.Navigator.SetAnimationState(DummyAnimations.Idle);
                     touchedDummy.Navigator.ResetRotation();
                     if (!_levelConditionHandler.AreAllWaitingSpotsFull()) return;
-                    UTask.Wait(1.5f).Do(() =>
+                    UTask.Wait(2f).Do(() =>
                     {
                         if (_levelConditionHandler.AreAllWaitingSpotsFull())
                         {

@@ -1,19 +1,9 @@
 {
-    "level_number": 0,
-    "grid_width": 2,
-    "grid_height": 3,
-    "timer": 50,
-    "grid": [
-        "y",
-        "r",
-        "r",
-        "y",
-        "y",
-        "r"
-    ],
-    "bus_count": 2,
-    "bus_order": [
-        "r",
-        "y"
-    ]
+       "level_number": 4,
+       "grid_width": 3,
+       "grid_height": 6,
+       "timer": 100,
+       "grid": ["r", "r", "r", "g", "g", "g", "b", "b", "b", "y", "y", "y", "g", "g", "g", "r", "r", "r"],
+       "bus_count":6,
+       "bus_order":["r", "g", "b", "y", "g", "r"]
 }

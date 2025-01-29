@@ -1,9 +1,19 @@
 {
-       "level_number": 2,
-       "grid_width": 3,
-       "grid_height": 3,
-       "timer": 90,
-       "grid": ["y", "emp", "y", "y", "emp", "y", "y", "emp", "y"],
-       "bus_count":2,
-       "bus_order":["y", "y"]
+    "level_number": 0,
+    "grid_width": 2,
+    "grid_height": 3,
+    "timer": 60,
+    "grid": [
+        "b",
+        "g",
+        "b",
+        "g",
+        "b",
+        "g"
+    ],
+    "bus_count": 2,
+    "bus_order": [
+        "g",
+        "b"
+    ]
 }

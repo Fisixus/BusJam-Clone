@@ -50,6 +50,7 @@ namespace Core.Factories
         {
             var dummy = CreateObj();
             dummy.IsLeftGrid = false;
+            dummy.SetTouchAbility(true);
             dummy.SetAttributes(dummyCoordinate, colorType);
             dummy.SetColor(ColorData);
             return dummy;
